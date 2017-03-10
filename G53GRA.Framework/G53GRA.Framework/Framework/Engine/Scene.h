@@ -9,7 +9,7 @@
  * <br>{@link #Update()} <b>(advanced)</b>
  * @author wil
  */
-#include "Engine.h"		//! Superclass for accessing OpenGL/Context windowing
+#include "Engine.cpp"		//! Superclass for accessing OpenGL/Context windowing
 #include "../Utility/Texture.h"	//! Handles Texture loading for bitmap images
 #include "../Utility/Camera.h"  //! Camera class
 #include <vector>		//! Utility for maintaining DispalyableObjects in system

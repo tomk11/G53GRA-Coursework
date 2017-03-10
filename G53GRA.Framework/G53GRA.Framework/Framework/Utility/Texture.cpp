@@ -5,9 +5,12 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+//#elif __linux__
 #else
-#include <OpenGL/OpenGL.h>
-#include <GLUT/glut.h>
+#include <GL/glut.h>
+//#else
+//#include <OpenGL/OpenGL.h>
+//#include <GLUT/glut.h>
 #pragma pack(1)
 #define WORD unsigned short
 #define DWORD unsigned int

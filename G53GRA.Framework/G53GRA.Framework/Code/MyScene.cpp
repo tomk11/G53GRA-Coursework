@@ -1,7 +1,7 @@
 #include "MyScene.h"
 
-#include "Triangle.h"
-#include "Floor.h"
+#include "Triangle.cpp"
+#include "Floor.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
 	: Scene(argc, argv, title, windowWidth, windowHeight){}

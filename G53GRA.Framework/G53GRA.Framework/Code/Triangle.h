@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DisplayableObject.h"
-#include "Animation.h"
-#include "Input.h"
+#include "../Framework/Interface/DisplayableObject.h"
+#include "../Framework/Interface/Animation.h"
+#include "../Framework/Interface/Input.h"
 
 class Triangle :
 	public DisplayableObject,

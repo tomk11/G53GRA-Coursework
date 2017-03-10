@@ -1,6 +1,5 @@
 #include "Camera.h"
 #include "VectorMath.h"
-#include "Scene.h"
 
 Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), currentButton(0), mouseX(0), mouseY(0)
 {

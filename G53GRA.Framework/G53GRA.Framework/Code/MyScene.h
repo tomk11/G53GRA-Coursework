@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Framework/Engine/Scene.h"
+#include "../Framework/Engine/Scene.cpp"
 
 class MyScene :
 	public Scene
