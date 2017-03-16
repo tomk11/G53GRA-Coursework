@@ -1,6 +1,5 @@
 #include "MyScene.h"
-
-#include "Triangle.cpp"
+#include "Judoka.cpp"
 #include "Floor.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
@@ -14,11 +13,12 @@ void MyScene::Initialise()
 	// DEMO 5
 	// Show floor and triangle
 	Floor *f = new Floor();
-	Triangle *t = new Triangle();
 	f->size(100.0f);
-	t->size(0.5f);
 	AddObjectToScene(f);
-	AddObjectToScene(t);
+
+	Judoka *j = new Judoka();
+	j->size(0.5f);
+	AddObjectToScene(j);
 }
 
 /// set the perspective of camera

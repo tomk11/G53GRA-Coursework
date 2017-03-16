@@ -4,20 +4,20 @@
 #include "../Framework/Interface/Animation.h"
 #include "../Framework/Interface/Input.h"
 
-class Triangle :
+class Judoka :
 	public DisplayableObject,
 	public Animation,
 	public Input
 {
 public:
-	Triangle();
-	~Triangle(){};
+	Judoka();
+	~Judoka(){};
 
 	void Display();
 	void Update(const double& deltaTime);
+	void DrawBody();
 
-	void Triangle::HandleKey(unsigned char key, int state, int x, int y){}
-
+	void HandleSpecialKey(int key, int state, int x, int y){}
 	void HandleMouse(int button, int state, int x, int y){}
 	void HandleMouseDrag(int x, int y){}
 	void HandleMouseMove(int x, int y){}

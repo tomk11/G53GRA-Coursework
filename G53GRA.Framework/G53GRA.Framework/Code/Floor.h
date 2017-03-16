@@ -1,5 +1,6 @@
 #pragma once
 #include "../Framework/Interface/DisplayableObject.h"
+#include <cmath>
 
 class Floor :
 	public DisplayableObject
