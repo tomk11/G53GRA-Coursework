@@ -33,8 +33,16 @@ void Judoka::Display()
 }
 
 void Judoka::DrawBody(){
-
 	glutSolidCube(100.0f);
+}
+
+void Judoka::DrawLeg(){
+}
+
+void Judoka::DrawArm(){
+}
+
+void Judoka::DrawHead(){
 }
 
 /// update the Z rotation variable with change in time

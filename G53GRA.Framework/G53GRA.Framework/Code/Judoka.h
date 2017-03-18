@@ -16,6 +16,9 @@ public:
 	void Display();
 	void Update(const double& deltaTime);
 	void DrawBody();
+	void DrawHead();
+	void DrawLeg();
+	void DrawArm();
 
 	void HandleSpecialKey(int key, int state, int x, int y){}
 	void HandleMouse(int button, int state, int x, int y){}
