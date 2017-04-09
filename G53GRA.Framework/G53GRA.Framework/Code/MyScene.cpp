@@ -15,6 +15,7 @@ void MyScene::Initialise()
 	// Show floor and triangle
 	Floor *f = new Floor();
 	f->size(100.0f);
+	f ->position(0,0,0);
 	AddObjectToScene(f);
 
 	Judoka *j = new Judoka();
@@ -22,7 +23,7 @@ void MyScene::Initialise()
 	//AddObjectToScene(j);
 
 	Table *t = new Table();
-	//t ->position(-50,5,0);
+	t ->position(0,0,0);
 	//t->size(2.f);
 	AddObjectToScene(t);
 }
