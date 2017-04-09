@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "VectorMath.h"
 
-Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), currentButton(0), mouseX(0), mouseY(0)
+Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), rKey(0), eKey(0), currentButton(0), mouseX(0), mouseY(0)
 {
 	Reset();
 }
@@ -64,6 +64,12 @@ void Camera::Update(const double& deltaTime)
 	if (sKey)
 		sub(eyePosition, forward, speed);
 
+	if (eKey)
+		add(eyePosition, up, speed);
+
+	if (rKey)
+		sub(eyePosition, up, speed);
+
 	SetupCamera();
 }
 
@@ -121,6 +127,14 @@ void Camera::HandleKey(unsigned char key, int state, int x, int y)
 		case 'S':
 		case 's':
 			sKey = state;
+			break;
+		case 'E':
+		case 'e':
+			eKey = state;
+			break;
+		case 'R':
+		case 'r':
+			eKey = state;
 			break;
 		case ' ':
 			Reset();

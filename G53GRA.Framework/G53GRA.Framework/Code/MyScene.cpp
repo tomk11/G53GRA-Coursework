@@ -1,6 +1,7 @@
 #include "MyScene.h"
 #include "Judoka.cpp"
 #include "Floor.cpp"
+#include "Table.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
 	: Scene(argc, argv, title, windowWidth, windowHeight){}
@@ -18,7 +19,12 @@ void MyScene::Initialise()
 
 	Judoka *j = new Judoka();
 	j->size(0.5f);
-	AddObjectToScene(j);
+	//AddObjectToScene(j);
+
+	Table *t = new Table();
+	//t ->position(-50,5,0);
+	//t->size(2.f);
+	AddObjectToScene(t);
 }
 
 /// set the perspective of camera
