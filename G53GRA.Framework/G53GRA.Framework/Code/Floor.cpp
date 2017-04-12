@@ -2,12 +2,10 @@
 
 void Floor::Display()
 {
-	// Draws an exciting chequered floor
 	glPushMatrix();
+    glTranslatef(pos[0], pos[1], pos[2]);
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_COLOR_MATERIAL);
-	//float bDiffuse[] = {0.0f,0.0f,0.0f,1.0f};
-	//float wDiffuse[] = {1.0f,1.0f,1.0f,1.0f};
 	float bDiffuse[] = {1.0f,1.0f,1.0f,1.0f};
 	float wDiffuse[] = {0.0f,0.0f,0.0f,1.0f};
 	float yDiffuse[] = {1.0f,1.0f,0.0f,0.7f};
@@ -28,10 +26,10 @@ void Floor::Display()
 				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, static_cast<GLfloat*>(yDiffuse));
 			}
 				glNormal3f(0.0f, 1.0f, 0.0f);
-				glVertex3f(scale[0] * static_cast<float>(i) + scale[0], -100.0f, scale[2] * static_cast<float>(j) + scale[2]);
-				glVertex3f(scale[0] * static_cast<float>(i) + scale[0], -100.0f, scale[2] * static_cast<float>(j));
-				glVertex3f(scale[0] * static_cast<float>(i), -100.0f, scale[2] * static_cast<float>(j));
-				glVertex3f(scale[0] * static_cast<float>(i), -100.0f, scale[2] * static_cast<float>(j) + scale[2]);
+				glVertex3f(scale[0] * static_cast<float>(i) + scale[0], 0, scale[2] * static_cast<float>(j) + scale[2]);
+				glVertex3f(scale[0] * static_cast<float>(i) + scale[0], 0, scale[2] * static_cast<float>(j));
+				glVertex3f(scale[0] * static_cast<float>(i), 0, scale[2] * static_cast<float>(j));
+				glVertex3f(scale[0] * static_cast<float>(i), 0, scale[2] * static_cast<float>(j) + scale[2]);
 		}
 	}
 	
