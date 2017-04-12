@@ -21,6 +21,7 @@ public:
 	void DrawLeftArm();
 	void DrawRightArm();
     void SetPositionModifier();
+    void walk();
     double sind(double angle);
     double cosd(double angle);
 
@@ -33,6 +34,8 @@ private:
 	float LeftElbowAngle = 0;
 	float RightShoulderAngle = -45;
 	float LeftShoulderAngle = 45;
+
+	float direction = 90;
 
 	// These parts define the relative dimentions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};

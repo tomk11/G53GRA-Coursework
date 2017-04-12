@@ -3,8 +3,9 @@
 void Judoka::Display()
 {
 	glPushMatrix();
+	glRotatef(direction, 0,1,0);
 	SetPositionModifier();
-    glTranslatef(pos[0] + positionModifier[0], pos[1] + positionModifier[1], pos[2]);
+    glTranslatef(pos[0] + positionModifier[0], pos[1] + positionModifier[1], pos[2] + positionModifier[2]);
 	glScalef(scale[0], scale[0], scale[0]);
 
 	glPushMatrix();
@@ -45,24 +46,6 @@ void Judoka::DrawBody(){
 	glutSolidCube(100.0f);
 }
 
-void Judoka::DrawRightLeg(){
-
-	glPushMatrix();
-	    glScalef(UpperLegDim[0],UpperLegDim[1],UpperLegDim[2]);
-        glRotatef(90,1,0,0);
-        GLUquadricObj *p = gluNewQuadric();
-        gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
-	glPopMatrix();
-
-	glTranslatef(0, -100*UpperLegDim[1],0);
-
-	glPushMatrix();
-	    glScalef(LowerLegDim[0],LowerLegDim[1],LowerLegDim[2]);
-        glRotatef(90,1,0,0);
-        GLUquadricObj *q = gluNewQuadric();
-        gluCylinder(q,50,50,100,10,10);    // Draw Our Cylinder
-	glPopMatrix();
-}
 
 void Judoka::DrawRightArm(){
 	glRotatef(RightShoulderAngle, 0,0,1);
@@ -102,7 +85,27 @@ void Judoka::DrawLeftArm(){
     glRotatef(90,1,0,0);
     gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
     glPopMatrix();
+}
 
+void Judoka::DrawRightLeg(){
+
+    glRotatef(RightHipAngle,1,0,0);
+	glPushMatrix();
+	    glScalef(UpperLegDim[0],UpperLegDim[1],UpperLegDim[2]);
+        glRotatef(90,1,0,0);
+        GLUquadricObj *p = gluNewQuadric();
+        gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
+	glPopMatrix();
+
+	glTranslatef(0, -100*UpperLegDim[1],0);
+
+	glPushMatrix();
+	    glScalef(LowerLegDim[0],LowerLegDim[1],LowerLegDim[2]);
+        glRotatef(90,1,0,0);
+        GLUquadricObj *q = gluNewQuadric();
+        glRotatef(RightKneeAngle,1,0,0);
+        gluCylinder(q,50,50,100,10,10);    // Draw Our Cylinder
+	glPopMatrix();
 }
 
 void Judoka::DrawLeftLeg(){
@@ -131,19 +134,6 @@ void Judoka::DrawHead(){
 
 }
 
-void Judoka::SetPositionModifier(){
-	if (positionRef == "Left Foot"){
-	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(LeftHipAngle - LeftKneeAngle) +UpperLegDim[1] * cosd(LeftHipAngle) + BodyDim[1]/2) ;
-	    //cout << cosd(LeftHipAngle) << endl;
-
-	    positionModifier[2]= 100*(LowerLegDim[2]* sind(LeftHipAngle - LeftKneeAngle) +UpperLegDim[2] * sind(LeftHipAngle) ) ;
-	}
-	if (positionRef == "Right Foot"){
-		positionModifier[1]= 100*(LowerLegDim[1]* cosd(RightHipAngle - RightKneeAngle) +UpperLegDim[1] * cosd(RightHipAngle) + BodyDim[1]/2) ;
-		positionModifier[2]= 100*(LowerLegDim[2]* sind(RightHipAngle - RightKneeAngle) +UpperLegDim[2] * sind(RightHipAngle)) ;
-	}
-}
-
 double Judoka::sind(double angle)
 {
 	double angleradians = angle * M_PI / 180.0f;
@@ -156,27 +146,42 @@ double Judoka::cosd(double angle)
 	return cos(angleradians);
 }
 
-void Judoka::walk(int steps){
-	if (positionRef == "LeftFoot"){
-		if (LeftHipAngle > -10){
+void Judoka::SetPositionModifier(){
+	if (positionRef == "Left Foot"){
+	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(LeftHipAngle - LeftKneeAngle) +UpperLegDim[1] * cosd(LeftHipAngle) + BodyDim[1]/2) ;
+	    positionModifier[2]= 100*(LowerLegDim[1] +UpperLegDim[1]) * sind(LeftHipAngle);
+	}
+	if (positionRef == "Right Foot"){
+		positionModifier[1]= 100*(LowerLegDim[1]* cosd(RightHipAngle - RightKneeAngle) +UpperLegDim[1] * cosd(RightHipAngle) + BodyDim[1]/2) ;
+		positionModifier[2]= 100*(LowerLegDim[1]* sind(RightHipAngle - RightKneeAngle) +UpperLegDim[1] * sind(RightHipAngle)) ;
+	}
+}
 
+void Judoka::walk(){
+	if (positionRef == "Left Foot"){
+		if (LeftHipAngle > -10){
+			LeftHipAngle -= 0.4;
+			RightHipAngle += 0.4;
+		}
+		else{
+			pos[2] +=  2* sind(LeftHipAngle) * 100 * (UpperLegDim[1] + LowerLegDim[1]);
+			positionRef = "Right Foot";
+		}
+	}
+	else{
+		if (RightHipAngle > -10){
+			RightHipAngle -= 0.4;
+			LeftHipAngle += 0.4;
+		}
+		else{
+			pos[2] +=  2 * sind(RightHipAngle) * 100 * (UpperLegDim[1] + LowerLegDim[1]);
+			positionRef = "Left Foot";
+		}
 	}
 
 }
 
 void Judoka::Update(const double& deltaTime)
 {
-	for (int i=0; i<10000000; i++){
-		while (LeftHipAngle < 10){
-			LeftHipAngle += 1;
-			RightHipAngle -= 1;
-		}
-		positionRef ="Right Foot";
-		while (RightHipAngle < 10){
-			LeftHipAngle -= 1;
-			RightHipAngle += 1;
-		}
-		positionRef ="Left Foot";
-		}
-	}
+	walk();
 }
