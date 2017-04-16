@@ -4,6 +4,7 @@
 #include "Table.cpp"
 #include "Light.cpp"
 #include "Clock.cpp"
+#include "Chair.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
 	: Scene(argc, argv, title, windowWidth, windowHeight){}
@@ -24,14 +25,20 @@ void MyScene::Initialise()
 	//AddObjectToScene(j);
 
 	Table *t = new Table();
-	t -> position(0,-100,-600);
+	t -> position(0,-100,-400);
 	t -> size(1.5);
 	AddObjectToScene(t);
 
 	Clock *c = new Clock();
 	c -> position (0,0,0);
 	c -> size(1);
-	AddObjectToScene(c);
+	//AddObjectToScene(c);
+
+	GLuint bark = Scene::GetTexture("../Textures/bark.bmp");
+	Chair *ch = new Chair(bark);
+	ch -> size(10);
+	ch -> position(0,-100,-450);
+	AddObjectToScene(ch);
 
 
 

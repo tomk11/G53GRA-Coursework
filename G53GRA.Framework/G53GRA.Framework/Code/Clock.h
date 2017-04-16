@@ -18,8 +18,8 @@ public:
 	void Update(const double& deltaTime);
 
 private:
-	string[2] player1; // player country
-	string[2] player2; // player country
+	string player1; // player country
+	string player2; // player country
 	int player1Score[4]; // ippon, wazari, yuko, shido 
 	int player22core[4]; // ippon, wazari, yuko, shido 
 
