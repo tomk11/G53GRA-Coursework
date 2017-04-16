@@ -1,25 +1,16 @@
 #include "Chair.h"
 
-Chair::Chair(GLuint _texid)
+Chair::Chair(string filename)
 {
-    texid = _texid;             // Store the texture binding ID
+	texid = Scene::GetTexture(filename);
 }
 
-
-void Chair::Draw()
-{
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texid);
-	// Draw the object with texture between these calls
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
-}
 
 void Chair::Display()
 {
 
     glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texid);
+    glEnable(GL_COLOR_MATERIAL);
 	// Draw the object with texture between these calls
 
 	glPushMatrix();
@@ -48,16 +39,17 @@ void Chair::Display()
 
 	    glPushMatrix();
 	        glTranslatef(0,SeatSize/2, -LegPositionH);
+	        glBindTexture(GL_TEXTURE_2D, texid);
 	        DrawBack();
+            glBindTexture(GL_TEXTURE_2D, 0);
 	    glPopMatrix();
 	
 	glPopMatrix();
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 }
 void Chair::DrawBack(){
-	glScalef(SeatSize,SeatSize, Thickness);
-	glutSolidCube(1);
+	glScalef(SeatSize/100,SeatSize/100, Thickness/100);
+	glutSolidCube(100);
 }
 
 void Chair::DrawSeat(){

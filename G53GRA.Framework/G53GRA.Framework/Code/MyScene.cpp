@@ -34,9 +34,7 @@ void MyScene::Initialise()
 	c -> size(1);
 	//AddObjectToScene(c);
 
-	GLuint bark = Scene::GetTexture("../Textures/bark.bmp");
-	Chair *ch = new Chair(bark);
-	ch -> size(10);
+	Chair *ch = new Chair("../Textures/bark.bmp");
 	ch -> position(0,-100,-450);
 	AddObjectToScene(ch);
 

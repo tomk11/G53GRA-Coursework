@@ -8,10 +8,9 @@ class Chair :
 public:
 	Chair(){};
 	~Chair(){};
-	Chair(GLuint _texid);    // Constructor with texture information
+	Chair(string filename);
 
 	void Display();
-	void Draw();
 	void Update(const double& deltaTime);
 	void DrawLeg();
 	void DrawSeat();
@@ -26,7 +25,6 @@ private:
 	float LegPositionH = (SeatSize - Thickness)/2;
 	float LegPositionV = (LegHeight + Thickness)/2;
 	
-	bool toTexture = false;     // Flag to check if texture loaded correctly
-	GLuint texid;               // Store a copy of the loaded texture binding id
+	int texid;               // Store a copy of the loaded texture binding id
 
 };
