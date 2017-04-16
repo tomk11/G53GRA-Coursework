@@ -37,13 +37,13 @@ void Table::Display()
 }
 
 void Table::DrawTop(){
-	glTranslatef(0,100,0);
+	glTranslatef(0,60,0);
 	glScalef(1,0.05,0.5);
 	glutSolidCube(100.0f);
 }
 
 void Table::DrawLeg(){
-	glTranslatef(0,50,0);
-	glScalef(0.05,1,0.05);
+	glTranslatef(0,30,0);
+	glScalef(0.05,0.6,0.05);
 	glutSolidCube(100.0f);
 }

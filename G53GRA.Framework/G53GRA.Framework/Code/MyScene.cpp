@@ -3,6 +3,7 @@
 #include "Floor.cpp"
 #include "Table.cpp"
 #include "Light.cpp"
+#include "Clock.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
 	: Scene(argc, argv, title, windowWidth, windowHeight){}
@@ -20,12 +21,17 @@ void MyScene::Initialise()
 	Judoka *j = new Judoka();
 	j -> position(0,-100,0);
 	j -> size(1);
-	AddObjectToScene(j);
+	//AddObjectToScene(j);
 
 	Table *t = new Table();
 	t -> position(0,-100,-600);
 	t -> size(1.5);
 	AddObjectToScene(t);
+
+	Clock *c = new Clock();
+	c -> position (0,0,0);
+	c -> size(1);
+	AddObjectToScene(c);
 
 
 
