@@ -1,6 +1,6 @@
 #include "MyScene.h"
 #include "Judoka.cpp"
-#include "Floor.cpp"
+#include "Stadium.cpp"
 #include "Table.cpp"
 #include "Light.cpp"
 #include "Clock.cpp"
@@ -14,10 +14,10 @@ void MyScene::Initialise()
 	// set the background colour of the scene to black
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	Floor *f = new Floor();
-	f->size(100.0f);
-	f -> position(0,-100,0);
-	AddObjectToScene(f);
+	Stadium *s = new Stadium();
+	s->size(100.0f);
+	s-> position(0,-100,0);
+	AddObjectToScene(s);
 
 	Judoka *j = new Judoka();
 	j -> position(0,-100,0);
@@ -26,18 +26,20 @@ void MyScene::Initialise()
 
 	Table *t = new Table();
 	t -> position(0,-100,-400);
-	t -> size(1.5);
 	AddObjectToScene(t);
 
 	Clock *c = new Clock();
-	c -> position (0,0,0);
+	c -> position (0,20,-400);
 	c -> size(1);
-	//AddObjectToScene(c);
+	AddObjectToScene(c);
 
-	Chair *ch = new Chair("../Textures/bark.bmp");
-	ch -> position(0,-100,-450);
-	AddObjectToScene(ch);
+	Chair *ch1 = new Chair();
+	ch1 -> position(-55,-100,-450);
+	AddObjectToScene(ch1);
 
+	Chair *ch2 = new Chair();
+	ch2 -> position(55,-100,-450);
+	AddObjectToScene(ch2);
 
 
     static GLfloat leftDiffuse [] = { 0.8f , 0.f , 0.0f , 1.0f };

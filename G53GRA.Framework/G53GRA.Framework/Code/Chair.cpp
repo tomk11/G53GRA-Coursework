@@ -1,18 +1,8 @@
 #include "Chair.h"
-
-Chair::Chair(string filename)
-{
-	texid = Scene::GetTexture(filename);
-}
-
+#include "TexturedCuboid.cpp"
 
 void Chair::Display()
 {
-
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_COLOR_MATERIAL);
-	// Draw the object with texture between these calls
-
 	glPushMatrix();
         glTranslatef(pos[0], pos[1] + LegHeight, pos[2]);
 	    glScalef(scale[0], scale[0], scale[0]);
@@ -39,25 +29,22 @@ void Chair::Display()
 
 	    glPushMatrix();
 	        glTranslatef(0,SeatSize/2, -LegPositionH);
-	        glBindTexture(GL_TEXTURE_2D, texid);
 	        DrawBack();
-            glBindTexture(GL_TEXTURE_2D, 0);
 	    glPopMatrix();
-	
 	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
+	
 }
 void Chair::DrawBack(){
-	glScalef(SeatSize/100,SeatSize/100, Thickness/100);
-	glutSolidCube(100);
+	glScalef(SeatSize,SeatSize, Thickness);
+	TexturedCuboid("../Textures/wood.bmp");
 }
 
 void Chair::DrawSeat(){
 	glScalef(SeatSize,Thickness,SeatSize);
-	glutSolidCube(1);
+	TexturedCuboid("../Textures/wood.bmp");
 }
 
 void Chair::DrawLeg(){
 	glScalef(Thickness,LegHeight,Thickness);
-	glutSolidCube(1);
+	TexturedCuboid("../Textures/wood.bmp");
 }

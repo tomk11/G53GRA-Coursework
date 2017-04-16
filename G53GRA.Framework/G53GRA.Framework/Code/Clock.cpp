@@ -2,8 +2,9 @@
 
 void Clock::Display()
 {
-	glPushMatrix();
-	glScalef(0.5,0.5,0.2);
+	glPushMatrix();    
+    glTranslatef(pos[0], pos[1] , pos[2]);
+	glScalef(1,0.5,0.2);
 	glutSolidCube(100.0f);
 
 	glPopMatrix();

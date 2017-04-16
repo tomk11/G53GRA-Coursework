@@ -6,8 +6,6 @@ void Floor::Display()
     glTranslatef(pos[0], pos[1], pos[2]);
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_COLOR_MATERIAL);
-	float bDiffuse[] = {1.0f,1.0f,1.0f,1.0f};
-	float wDiffuse[] = {0.0f,0.0f,0.0f,1.0f};
 	float yDiffuse[] = {1.0f,1.0f,0.0f,0.7f};
 	float rDiffuse[] = {1.0f,0.0f,0.0f,0.7f};
 	float specular[] = {1.0f,1.0f,1.0f,1.0f};

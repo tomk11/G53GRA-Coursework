@@ -1,49 +1,49 @@
 #include "Table.h"
+#include "TexturedCuboid.cpp"
+
+Table::Table(){
+	texture = "../Textures/wood.bmp";
+}
 
 void Table::Display()
 {
 	glPushMatrix();
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	    
+	    glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glTranslatef(pos[0], pos[1] + LegHeight, pos[2]);
+	    glScalef(scale[0], scale[0], scale[0]);
+	    
+	    glPushMatrix();
+	        DrawTop();
+	    glPopMatrix();
+	    glPushMatrix();
+	        glTranslatef(-LegPositionL,-LegPositionV, -LegPositionW);
+	        DrawLeg();
+	    glPopMatrix();
+	    glPushMatrix();
+	        glTranslatef(LegPositionL,-LegPositionV, -LegPositionW);
+	        DrawLeg();
+	    glPopMatrix();
+	    glPushMatrix();
+	        glTranslatef(-LegPositionL,-LegPositionV, LegPositionW);
+	        DrawLeg();
+	    glPopMatrix();
+	    glPushMatrix();
+	        glTranslatef(LegPositionL,-LegPositionV, LegPositionW);
+	        DrawLeg();
+	    glPopMatrix();
 
-    glTranslatef(pos[0], pos[1], pos[2]);
-	glScalef(scale[0], scale[0], scale[0]);
-	glPushMatrix();
-	DrawTop();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-50,0,-25);
-	DrawLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-50,0,25);
-	DrawLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(50,0,-25);
-	DrawLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(50,0,25);
-	DrawLeg();
-	glPopMatrix();
-
-	glPopAttrib();
+	    glPopAttrib();
 
 	glPopMatrix();
 }
 
 void Table::DrawTop(){
-	glTranslatef(0,60,0);
-	glScalef(1,0.05,0.5);
-	glutSolidCube(100.0f);
+	glScalef(TopLength,Thickness,TopWidth);
+    TexturedCuboid(string(texture));
 }
 
 void Table::DrawLeg(){
-	glTranslatef(0,30,0);
-	glScalef(0.05,0.6,0.05);
-	glutSolidCube(100.0f);
+	glScalef(Thickness, LegHeight, Thickness);
+    TexturedCuboid(string(texture));
 }
