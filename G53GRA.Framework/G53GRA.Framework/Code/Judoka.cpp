@@ -19,12 +19,12 @@ void Judoka::Display()
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(50*BodyDim[0], 50*BodyDim[1],0);
+	glTranslatef(50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
 	DrawLeftArm();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-50*BodyDim[0], 50*BodyDim[1],0);
+	glTranslatef(-50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
 	DrawRightArm();
 	glPopMatrix();
 
@@ -58,9 +58,9 @@ void Judoka::DrawRightArm(){
     glPopMatrix();
 
 	glTranslatef(0, -100*UpperArmDim[1],0);
-	glRotatef(-RightShoulderAngle, 0,0,1);
 
     glPushMatrix();
+    glRotatef(RightElbowAngle, 0,0,1);
 	glScalef(LowerArmDim[0], LowerArmDim[1], LowerArmDim[2]);
     glRotatef(90,1,0,0);
     gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
@@ -100,11 +100,10 @@ void Judoka::DrawRightLeg(){
 	glTranslatef(0, -100*UpperLegDim[1],0);
 
 	glPushMatrix();
+        glRotatef(RightKneeAngle,1,0,0);
 	    glScalef(LowerLegDim[0],LowerLegDim[1],LowerLegDim[2]);
         glRotatef(90,1,0,0);
-        GLUquadricObj *q = gluNewQuadric();
-        glRotatef(RightKneeAngle,1,0,0);
-        gluCylinder(q,50,50,100,10,10);    // Draw Our Cylinder
+        gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
 	glPopMatrix();
 }
 
@@ -120,13 +119,13 @@ void Judoka::DrawLeftLeg(){
 	glTranslatef(0, -100*UpperLegDim[1],0);
 
 	glPushMatrix();
+        glRotatef(LeftKneeAngle,1,0,0);
 	    glScalef(LowerLegDim[0],LowerLegDim[1],LowerLegDim[2]);
         glRotatef(90,1,0,0);
-        glRotatef(LeftKneeAngle,1,0,0);
         gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
 	glPopMatrix();
+}
 
-	}
 void Judoka::DrawHead(){
 	glScalef(HeadDim[0],HeadDim[1],HeadDim[2]);
 	glTranslatef(0, 100, 0);
@@ -148,40 +147,72 @@ double Judoka::cosd(double angle)
 
 void Judoka::SetPositionModifier(){
 	if (positionRef == "Left Foot"){
-	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(LeftHipAngle - LeftKneeAngle) +UpperLegDim[1] * cosd(LeftHipAngle) + BodyDim[1]/2) ;
-	    positionModifier[2]= 100*(LowerLegDim[1] +UpperLegDim[1]) * sind(LeftHipAngle);
+	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * cosd(LeftHipAngle) + BodyDim[1]/2) ;
+		positionModifier[2]= 100*(LowerLegDim[1]* sind(LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(LeftHipAngle)) ;
 	}
 	if (positionRef == "Right Foot"){
-		positionModifier[1]= 100*(LowerLegDim[1]* cosd(RightHipAngle - RightKneeAngle) +UpperLegDim[1] * cosd(RightHipAngle) + BodyDim[1]/2) ;
-		positionModifier[2]= 100*(LowerLegDim[1]* sind(RightHipAngle - RightKneeAngle) +UpperLegDim[1] * sind(RightHipAngle)) ;
+		positionModifier[1]= 100*(LowerLegDim[1]* cosd(RightHipAngle + RightKneeAngle) +UpperLegDim[1] * cosd(RightHipAngle) + BodyDim[1]/2) ;
+		positionModifier[2]= 100*(LowerLegDim[1]* sind(RightHipAngle + RightKneeAngle) +UpperLegDim[1] * sind(RightHipAngle)) ;
 	}
 }
 
+
+void Judoka::ippon(){
+
+	RightElbowAngle = 0;
+	//RightShoulderAngle = -90;
+}
+
 void Judoka::walk(){
+	float speed = 0.4;
 	if (positionRef == "Left Foot"){
-		if (LeftHipAngle > -10){
-			LeftHipAngle -= 0.4;
-			RightHipAngle += 0.4;
+		if (LeftHipAngle < 15){
+			LeftHipAngle += speed;
+			RightHipAngle -= speed;
+
+		    if (RightHipAngle > 0){
+			    RightKneeAngle += 2*speed;
+		    }
+		    else{
+			    if (RightKneeAngle > 0){
+				    RightKneeAngle -= 2*speed;
+			    }
+		    }
 		}
 		else{
-			pos[2] +=  2* sind(LeftHipAngle) * 100 * (UpperLegDim[1] + LowerLegDim[1]);
+		    pos[2] += 2*100*(LowerLegDim[1]* sind(LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(LeftHipAngle)) ;
 			positionRef = "Right Foot";
 		}
 	}
 	else{
-		if (RightHipAngle > -10){
-			RightHipAngle -= 0.4;
-			LeftHipAngle += 0.4;
+		if (RightHipAngle < 15){
+			RightHipAngle += speed;
+			LeftHipAngle -= speed;
+		    if (LeftHipAngle > 0){
+			    LeftKneeAngle += 2*speed;
+		    }
+		    else{
+			    if (LeftKneeAngle > 0){
+			    	LeftKneeAngle -= 2*speed;
+			    }
+		    }
 		}
 		else{
-			pos[2] +=  2 * sind(RightHipAngle) * 100 * (UpperLegDim[1] + LowerLegDim[1]);
+		    pos[2]+= 2*100*(LowerLegDim[1]* sind(RightHipAngle + RightKneeAngle) +UpperLegDim[1] * sind(RightHipAngle)) ;
 			positionRef = "Left Foot";
 		}
 	}
 
 }
 
+void Judoka::HandleKey(unsigned char key, int state, int mX, int mY){
+	if (state == 1 && key == 'm'){
+		RightShoulderAngle += 1.0;
+	}
+}
+
 void Judoka::Update(const double& deltaTime)
 {
-	walk();
+	//walk();
+	ippon();
 }

@@ -2,11 +2,13 @@
 
 #include "../Framework/Interface/DisplayableObject.h"
 #include "../Framework/Interface/Animation.h"
+#include "../Framework/Interface/Input.h"
 #include <math.h>
 
 class Judoka :
 	public DisplayableObject,
-	public Animation
+	public Animation,
+	public Input
 {
 public:
 	Judoka(){};
@@ -21,9 +23,14 @@ public:
 	void DrawLeftArm();
 	void DrawRightArm();
     void SetPositionModifier();
+
+    void ippon();
+
     void walk();
     double sind(double angle);
     double cosd(double angle);
+    
+    void HandleKey(unsigned char key, int state, int mX, int mY);
 
 private:
 	float RightKneeAngle = 0;
@@ -32,10 +39,10 @@ private:
 	float LeftHipAngle = 0;
 	float RightElbowAngle = 0;
 	float LeftElbowAngle = 0;
-	float RightShoulderAngle = -45;
-	float LeftShoulderAngle = 45;
+	float RightShoulderAngle = 0;
+	float LeftShoulderAngle = 0;
 
-	float direction = 90;
+	float direction = 0;
 
 	// These parts define the relative dimentions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};
