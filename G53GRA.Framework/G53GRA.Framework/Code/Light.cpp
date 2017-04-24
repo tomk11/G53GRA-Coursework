@@ -45,8 +45,8 @@ void Light::Display()
   glLightfv(_GL_LIGHT, GL_DIFFUSE, _diffuse);
   glLightfv(_GL_LIGHT, GL_SPECULAR, _specular);
 
-  glLightf(_GL_LIGHT, GL_LINEAR_ATTENUATION, 0.00001f);
-  glLightf(_GL_LIGHT, GL_QUADRATIC_ATTENUATION, 0.00001f);
+  glLightf(_GL_LIGHT, GL_LINEAR_ATTENUATION, 0.000001f);
+  glLightf(_GL_LIGHT, GL_QUADRATIC_ATTENUATION, 0.0000025f);
 
   GLfloat lPosition[4] = {pos[0], pos[1], pos[2], 1};
   glLightfv(_GL_LIGHT, GL_POSITION, lPosition);

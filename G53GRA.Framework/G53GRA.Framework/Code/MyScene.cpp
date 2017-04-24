@@ -19,38 +19,47 @@ void MyScene::Initialise()
 	s-> position(0,-100,0);
 	AddObjectToScene(s);
 
-	Judoka *j = new Judoka();
-	j -> position(0,-100,0);
-	j -> size(1);
-	//AddObjectToScene(j);
+	Judoka *j1 = new Judoka(string("right"));
+	j1 -> position(350,-100,-350);
+	j1 -> size(1);
+	AddObjectToScene(j1);
+
+	Judoka *j2 = new Judoka(string("left"));
+	j2 -> position(-350,-100,-350);
+	j2 -> size(1);
+	AddObjectToScene(j2);
 
 	Table *t = new Table();
-	t -> position(0,-100,-400);
+	t -> position(0,-100,-450);
 	AddObjectToScene(t);
 
 	Clock *c = new Clock();
-	c -> position (0,20,-400);
+	c -> position (0,20,-450);
 	c -> size(1);
 	AddObjectToScene(c);
 
 	Chair *ch1 = new Chair();
-	ch1 -> position(-55,-100,-450);
+	ch1 -> position(-55,-100,-500);
 	AddObjectToScene(ch1);
 
 	Chair *ch2 = new Chair();
-	ch2 -> position(55,-100,-450);
+	ch2 -> position(55,-100,-500);
 	AddObjectToScene(ch2);
 
-
-    static GLfloat leftDiffuse [] = { 0.8f , 0.f , 0.0f , 1.0f };
+    static GLfloat leftDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
     Light *l = new Light(leftDiffuse , GL_LIGHT0 );
-	l ->position(-200,100,0);
+	l ->position(-200,700,0);
 	AddObjectToScene(l);
+
+    static GLfloat rightDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
+    Light *r = new Light(rightDiffuse , GL_LIGHT1 );
+	r ->position(200,700,0);
+	AddObjectToScene(r);
 }
 
 /// set the perspective of camera
 void MyScene::Projection()
 {
     GLdouble aspect = static_cast<GLdouble>(windowWidth) / static_cast<GLdouble>(windowHeight);
-    gluPerspective(60.0, aspect, 1.0, 1000.0);
+    gluPerspective(60.0, aspect, 1.0, 2500.0);
 }

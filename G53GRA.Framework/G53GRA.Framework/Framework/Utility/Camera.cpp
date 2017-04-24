@@ -9,12 +9,12 @@ Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), rKey(0), eKey(0), current
 void Camera::Reset(){
 	// set the camera position to start at (0,0,0)
 	eyePosition[0] = 0.0f;
-	eyePosition[1] = 0.0f;
-	eyePosition[2] = 0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
+	eyePosition[1] = 200.0f;
+	eyePosition[2] = 300 + 0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
 
 	// set the view direction vector of the camera to be (0,0,-1)
 	vd[0] = 0.0f;
-	vd[1] = 0.0f;
+	vd[1] = -0.3f;
 	vd[2] = -1.0f;
 
 	// set the planar forward direction vector of the camera to be (0,0,-1)
