@@ -1,23 +1,166 @@
-#include "Judoka.h"
+#include "Person.h"
 
-Judoka::Judoka(){
+Person::Person(){
 	// initialise the position modifier
 	positionModifier[1]= 100*(LowerLegDim[1]* cosd(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * cosd(BodyAngle)) ;
 	positionModifier[2]= 100*(LowerLegDim[1]* sind(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * sind(BodyAngle)) ;
 }
 
-Judoka::Judoka(string id){
+Person::Person(string id){
 	ID = id;
-	Judoka();
+	addInstruction("dummy", 0);
+	Person();
 }
 
-void Judoka::Display()
+
+// ANIMATION FUNCTIONS (INTERPOLATION)
+void Person::reset(){
+	BodyAngle =	RightKneeAngle = LeftKneeAngle = RightHipAngle = LeftHipAngle = RightElbowAngle = LeftElbowAngle = RightShoulderAngle = LeftShoulderAngle = 0;
+}
+
+void Person::addInstruction(string instruction, float time){
+	float duration =0;
+	if (instruction  == "walk" || instruction == "walkb"){
+		duration = time * walkTime;
+	}
+	else if (instruction == "bow"){
+		duration = time *bowTime;
+	}
+	else {
+		duration = time;
+	}
+	instructions.push_back(instruction);
+	instructionTimes.push_back(duration);
+	totalAnimationTime += duration;
+	totalInstructionTimes.push_back(totalAnimationTime);
+
+
+	for(int i=0; i<instructions.size(); i++){
+	  cout << instructions[i] << ' ';
+	}
+	cout << endl;
+	for(int i=0; i<instructions.size(); i++){
+	  cout << totalInstructionTimes[i] << ' ';
+	}
+	cout << endl;
+	
+
+}
+
+void Person::turnC(){
+	directionModifier  = -currentInstructionTime/totalInstructionTime * 90;
+}
+void Person::turnA(){
+	directionModifier = currentInstructionTime/totalInstructionTime * 90;
+}
+
+void Person::bow(){
+	if (currentInstructionTime >= keyframe +1){
+		keyframe += 1;
+	    if (keyframe ==2 ){
+		    currentInstructionTime=0;
+			keyframe = 0;
+		} 
+	}
+	interp = 1+ keyframe-currentInstructionTime;
+	LeftHipAngle = interp * BowLeftHipAngleFrames[keyframe] + (1-interp) * BowLeftHipAngleFrames[keyframe+1];
+	RightHipAngle = interp * BowRightHipAngleFrames[keyframe] + (1-interp) * BowRightHipAngleFrames[keyframe+1];
+	BodyAngle = interp * BowBodyAngleFrames[keyframe] + (1-interp) * BowBodyAngleFrames[keyframe+1];
+}
+
+void Person::walk(){
+	if (currentInstructionTime >= keyframe + 1){
+		keyframe += 1;
+		if (keyframe == 2){
+			SetPositionModifier("Right Foot");
+		}
+		if (keyframe == 6){
+			SetPositionModifier("Left Foot");
+		}
+	    
+	    if (keyframe == 8){
+		    currentInstructionTime=0;
+			keyframe = 0;
+		} 
+	}
+	else{}
+
+	interp = 1 +keyframe-currentInstructionTime;
+	LeftHipAngle = interp * WalkLeftHipAngleFrames[keyframe] + (1-interp) * WalkLeftHipAngleFrames[keyframe+1];
+	RightHipAngle = interp * WalkRightHipAngleFrames[keyframe] + (1-interp) * WalkRightHipAngleFrames[keyframe+1];
+	LeftKneeAngle = interp * WalkLeftKneeAngleFrames[keyframe] + (1-interp) * WalkLeftKneeAngleFrames[keyframe+1];
+	RightKneeAngle = interp * WalkRightKneeAngleFrames[keyframe] + (1-interp) * WalkRightKneeAngleFrames[keyframe+1];
+    
+}
+
+void Person::walkb(){
+	if (currentInstructionTime >= keyframe + 1){
+		keyframe += 1;
+		if (keyframe == 2){
+			SetPositionModifier("Right Foot");
+		}
+		if (keyframe == 6){
+			SetPositionModifier("Left Foot");
+		}
+	    
+	    if (keyframe == 8){
+		    currentInstructionTime=0;
+			keyframe = 0;
+		} 
+	}
+	else{}
+
+	interp = 1 +keyframe-currentInstructionTime;
+	LeftHipAngle = interp * WalkBLeftHipAngleFrames[keyframe] + (1-interp) * WalkBLeftHipAngleFrames[keyframe+1];
+	RightHipAngle = interp * WalkBRightHipAngleFrames[keyframe] + (1-interp) * WalkBRightHipAngleFrames[keyframe+1];
+	LeftKneeAngle = interp * WalkBLeftKneeAngleFrames[keyframe] + (1-interp) * WalkBLeftKneeAngleFrames[keyframe+1];
+	RightKneeAngle = interp * WalkBRightKneeAngleFrames[keyframe] + (1-interp) * WalkBRightKneeAngleFrames[keyframe+1];
+    
+}
+
+void Person::Update(const double& deltaTime)
+{
+	for (int i=1; i<instructions.size(); i++){
+		if (totalInstructionTimes[i-1] <= currentAnimationTime && currentAnimationTime < totalInstructionTimes[i]){
+			if (currentInstructionStage != i){
+				reset();
+				currentInstructionStage = i;
+			    keyframe = -1;
+			    currentInstructionTime = 0;
+			    totalInstructionTime = instructionTimes[i];
+			    currentInstruction = instructions[i];
+			    SetPositionModifier("Left Foot");
+				if (currentInstruction == "bow"){
+		            speed=2;
+				}
+				if(currentInstruction == "walk" || currentInstruction == "walkb"){
+		            speed=8;
+		        }
+		        if(directionModifier !=0){
+		        	direction = direction + directionModifier;
+		        	directionModifier = 0;
+		        }
+			}
+			if (currentInstruction == "bow"){bow();}
+			else if(currentInstruction == "walk"){walk();}
+			else if(currentInstruction == "walkb"){walkb();}
+			else if(currentInstruction == "turnA"){ turnA();}
+			else if(currentInstruction == "turnC"){ turnC();}
+		}
+	}
+	currentAnimationTime += speed * deltaTime;
+	currentInstructionTime += speed * deltaTime;
+}
+
+
+// FUNCTIONS TO DISPLAY THE FUNCTION (HIERARCHICAL MODELING)
+void Person::Display()
 {
 	glPushMatrix();
 	SetPositionModifier();
     glTranslatef(pos[0], pos[1], pos[2]);
     glTranslatef(positionModifier[0], positionModifier[1], positionModifier[2]);
-	glRotatef(direction, 0,1,0);
+	glRotatef(direction + directionModifier, 0,1,0);
 	glScalef(scale[0], scale[0], scale[0]);
 	
 	glRotatef(BodyAngle,1,0,0);
@@ -54,13 +197,13 @@ void Judoka::Display()
 	glPopMatrix();
 }
 
-void Judoka::DrawBody(){
+void Person::DrawBody(){
 	glScalef(BodyDim[0],BodyDim[1],BodyDim[2]);
 	glutSolidCube(100.0f);
 }
 
 
-void Judoka::DrawRightArm(){
+void Person::DrawRightArm(){
 	glRotatef(RightShoulderAngle, 0,0,1);
     GLUquadricObj *p = gluNewQuadric();
 
@@ -79,7 +222,7 @@ void Judoka::DrawRightArm(){
     gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
     glPopMatrix();
 }
-void Judoka::DrawLeftArm(){
+void Person::DrawLeftArm(){
 	glRotatef(LeftShoulderAngle, 0,0,1);
     GLUquadricObj *p = gluNewQuadric();
 
@@ -100,7 +243,7 @@ void Judoka::DrawLeftArm(){
     glPopMatrix();
 }
 
-void Judoka::DrawRightLeg(){
+void Person::DrawRightLeg(){
 
     glRotatef(RightHipAngle,1,0,0);
 	glPushMatrix();
@@ -120,7 +263,7 @@ void Judoka::DrawRightLeg(){
 	glPopMatrix();
 }
 
-void Judoka::DrawLeftLeg(){
+void Person::DrawLeftLeg(){
     glRotatef(LeftHipAngle,1,0,0);
 	glPushMatrix();
 	    glScalef(UpperLegDim[0],UpperLegDim[1],UpperLegDim[2]);
@@ -139,30 +282,30 @@ void Judoka::DrawLeftLeg(){
 	glPopMatrix();
 }
 
-void Judoka::DrawHead(){
+void Person::DrawHead(){
 	glScalef(HeadDim[0],HeadDim[1],HeadDim[2]);
 	glTranslatef(0, 100, 0);
 	glutSolidSphere(100.0f, 10,10);
 
 }
 
-double Judoka::sind(double angle)
+double Person::sind(double angle)
 {
 	double angleradians = angle * M_PI / 180.0f;
 	return sin(angleradians);
 }
 
-double Judoka::cosd(double angle)
+double Person::cosd(double angle)
 {
 	double angleradians = angle * M_PI / 180.0f;
 	return cos(angleradians);
 }
 
-void Judoka::SetPositionModifier(){
+void Person::SetPositionModifier(){
 	SetPositionModifier(string(positionRef));
 }
 
-void Judoka::SetPositionModifier(string newPositionRef){
+void Person::SetPositionModifier(string newPositionRef){
 	bool change = positionRef != newPositionRef;
 
 	if (change){
@@ -192,124 +335,6 @@ void Judoka::SetPositionModifier(string newPositionRef){
 	    pos[2] -= positionModifier[2];
 	    pos[0] -= positionModifier[0];
 	}
-    
-    
+
 }
 
-
-void Judoka::reset(){
-	BodyAngle =	RightKneeAngle = LeftKneeAngle = RightHipAngle = LeftHipAngle = RightElbowAngle = LeftElbowAngle = RightShoulderAngle = LeftShoulderAngle = 0;
-}
-
-void Judoka::bow(){
-	if (animateTime > keyframe + 1){
-		keyframe += 1;
-	    if (keyframe >1){
-		    animateTime=0;
-			keyframe = 0;
-		} 
-		cout << keyframe << endl;
-	}
-	interp = 1 +keyframe-animateTime;
-	LeftHipAngle = interp * BowLeftHipAngleFrames[keyframe] + (1-interp) * BowLeftHipAngleFrames[keyframe+1];
-	RightHipAngle = interp * BowRightHipAngleFrames[keyframe] + (1-interp) * BowRightHipAngleFrames[keyframe+1];
-	BodyAngle = interp * BowBodyAngleFrames[keyframe] + (1-interp) * BowBodyAngleFrames[keyframe+1];
-}
-
-void Judoka::ippon(){
-	reset();
-}
-
-void Judoka::walk(){
-	if (animateTime >= keyframe + 1){
-		keyframe += 1;
-		if (keyframe == 2){
-			SetPositionModifier("Right Foot");
-		}
-		if (keyframe == 6){
-			SetPositionModifier("Left Foot");
-		}
-	    
-	    if (keyframe>7){
-		    animateTime=0;
-			keyframe = 0;
-		} 
-	}
-	else{}
-
-	interp = 1 +keyframe-animateTime;
-	LeftHipAngle = interp * WalkLeftHipAngleFrames[keyframe] + (1-interp) * WalkLeftHipAngleFrames[keyframe+1];
-	RightHipAngle = interp * WalkRightHipAngleFrames[keyframe] + (1-interp) * WalkRightHipAngleFrames[keyframe+1];
-	LeftKneeAngle = interp * WalkLeftKneeAngleFrames[keyframe] + (1-interp) * WalkLeftKneeAngleFrames[keyframe+1];
-	RightKneeAngle = interp * WalkRightKneeAngleFrames[keyframe] + (1-interp) * WalkRightKneeAngleFrames[keyframe+1];
-    
-}
-
-void Judoka::HandleKey(unsigned char key, int state, int mX, int mY){
-	if (state == 1 && key == 'm'){
-		RightShoulderAngle += 1.0;
-	}
-}
-
-
-void Judoka::Update(const double& deltaTime)
-{
-	if(totalAnimateTime <= bowTime){
-		if (stage == -1){
-			speed=2;
-			stage +=1 ;
-			keyframe = -1;
-			animateTime = 0;
-		}
-		bow();
-	}
-	else if(totalAnimateTime <= bowTime + 8*walkTime){ 
-		if (stage == 0){
-			speed = 6;
-			stage += 1;
-			cout << stage << endl;
-			keyframe = -1;
-			animateTime = 0;
-		}
-		walk();
-	}
-	else if (totalAnimateTime <= 8*walkTime + 2*bowTime){
-		if (stage == 1){
-			speed=2;
-			stage = 2;
-			cout << stage << endl;
-			keyframe = -1;
-			animateTime = 0;
-		}
-		bow();
-	}
-	else if (totalAnimateTime <= 13*walkTime + 2*bowTime){
-		if (stage == 2){
-			SetPositionModifier("Left Foot");
-			if (ID == "left"){
-				direction = 90;
-			}
-			else{
-				direction = -90;
-			}
-			speed=6;
-			stage = 3;
-			cout << stage << endl;
-			keyframe = -1;
-			animateTime = 0;
-		}
-		walk();
-	}
-	else if (totalAnimateTime <= 13*walkTime + 3*bowTime){
-		if (stage == 3){
-			speed=2;
-			stage = 4;
-			cout << stage << endl;
-			keyframe = -1;
-			animateTime = 0;
-		}
-		bow();
-	}
-	animateTime += speed*deltaTime;
-	totalAnimateTime += speed * deltaTime;
-}

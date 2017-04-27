@@ -5,15 +5,15 @@
 #include "../Framework/Interface/Input.h"
 #include <math.h>
 
-class Judoka :
+class Person :
 	public DisplayableObject,
 	public Animation,
 	public Input
 {
 public:
-	Judoka();
-	Judoka(string id);
-	~Judoka(){};
+	Person();
+	Person(string id);
+	~Person(){};
 
 	void Display();
     void Update(const double& deltaTime);
@@ -25,18 +25,21 @@ public:
 	void DrawRightArm();
     void SetPositionModifier(string newPositionRef);
     void SetPositionModifier();
+    void addInstruction(string instruction, float duration);
 
     // These functions set the body position of the judoka
     void reset();
     void ippon();
     void bow();
     void walk();
-    void walkFrame(int i);
+    void walkb();
+    void turnA();
+    void turnC();
+    void wait();
 
     double sind(double angle);
     double cosd(double angle);
     
-    void HandleKey(unsigned char key, int state, int mX, int mY);
 
 private:
 	float BodyAngle =0;
@@ -53,22 +56,40 @@ private:
 	int WalkRightHipAngleFrames[9] = {0, -10, -25, -10, 0, 10, 15, 10,0};
 	int WalkRightKneeAngleFrames[9] = {0, 10, 20, 0, 0, 10, 8, 5,0};
 	int WalkLeftHipAngleFrames[9] = {0, 10, 15, 10, 0, -10, -25, -10,0};
-	int WalkLeftKneeAngleFrames[9] = {0, 10, 8, 5, 0, 10, 20, 0,0};
+	int WalkLeftKneeAngleFrames[9] = {0, 10, 8, 5, 0, 10, 20, 0, 0};
+
+	int WalkBRightHipAngleFrames[9] = {0, 10, 15, 10, 0, -10, -25, -10, 0};
+	int WalkBRightKneeAngleFrames[9] = {0, 5, 8, 10, 0, 0, 20, 10, 0};
+	int WalkBLeftHipAngleFrames[9] = {0, -10, -25, -10, 0, 10, 15, 10, 0};
+	int WalkBLeftKneeAngleFrames[9] = {0, 0, 20, 10, 0, 5, 8, 10, 0};
+
+	//Keyframes for turning
+	int turnAKF[3] ={0,90,0};
+	int turnCKF[3] ={0,-90,0};
 
 	//Keyframes for bowing
-	int BowBodyAngleFrames[3] = {0, 60,0};
-	int BowRightHipAngleFrames[3] = {0,-70,0};
-	int BowLeftHipAngleFrames[3] = {0,-70,0};
+	int BowBodyAngleFrames[4] = {0, 60,0, 60};
+	int BowRightHipAngleFrames[4] = {0,-70,0, -70};
+	int BowLeftHipAngleFrames[4] = {0,-70,0, -70};
 
 	float direction = 0;
 
 	//Variables used for animation
+    // INSTRUCTION refers to a variable that tracks just a single segment of the animation and ANIMATION refers to variables that track the whole sequence.
+    // Also CURRENT refers to variables that track the current state while TOTAL refers to the time at the end of this sequence
+    vector<string> instructions;
+    vector<float> instructionTimes; 
+    vector<float> totalInstructionTimes; 
+
+    float currentAnimationTime = 0;
+    float currentInstructionTime = 0;
+    float totalAnimationTime = 0;
+    float totalInstructionTime = 0;
+    int currentInstructionStage = 0;
+    string currentInstruction;
 	int keyframe;
-	int stage = -1;
-	float animateTime = 0;
-	float totalAnimateTime = 0;
 	float interp;
-	float speed = 6;
+	float speed =1;
 	int bowTime = 2;
 	int walkTime = 4;
 
@@ -85,6 +106,7 @@ private:
 	float positionModifier[3] = {0,0,0};
 	float positionModifierSize;
 	string positionRef = "Left Foot";
+	float directionModifier =0;
 
 	string ID;
 };

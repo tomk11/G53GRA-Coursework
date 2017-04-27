@@ -1,5 +1,5 @@
 #include "MyScene.h"
-#include "Judoka.cpp"
+#include "Person.cpp"
 #include "Stadium.cpp"
 #include "Table.cpp"
 #include "Light.cpp"
@@ -19,7 +19,7 @@ void MyScene::Initialise()
 	s-> position(0,-100,0);
 	AddObjectToScene(s);
 
-	Judoka *j1 = new Judoka(string("right"));
+	/*Judoka *j1 = new Judoka(string("right"));
 	j1 -> position(350,-100,-350);
 	j1 -> size(1);
 	AddObjectToScene(j1);
@@ -27,6 +27,46 @@ void MyScene::Initialise()
 	Judoka *j2 = new Judoka(string("left"));
 	j2 -> position(-350,-100,-350);
 	j2 -> size(1);
+	AddObjectToScene(j2);
+	*/
+	Person *j1 = new Person(string("left"));
+	j1 -> position(-350,-100,-350);
+	j1 -> size(1);
+	j1 ->addInstruction("bow", 1);
+	j1 ->addInstruction("walk", 8 );
+	j1 ->addInstruction("turnA",3);
+	j1 ->addInstruction("bow", 1);
+	j1 ->addInstruction("walk", 5);
+	j1 ->addInstruction("bow", 1);
+
+	//j1 ->addInstruction("throw", 3);
+
+	j1 ->addInstruction("bow", 1);
+	j1 ->addInstruction("walkb", 5 );
+	j1 ->addInstruction("bow", 1);
+	j1 ->addInstruction("turnC", 1);
+	j1 ->addInstruction("walkb", 8);
+	j1 ->addInstruction("bow", 1);
+	j1 ->addInstruction("wait", 4);
+	AddObjectToScene(j1);
+
+	Person *j2 = new Person(string("left"));
+	j2 -> position(350,-100,-350);
+	j2 -> size(1);
+	j2 ->addInstruction("bow", 1);
+	j2 ->addInstruction("walk", 8 );
+	j2 ->addInstruction("turnC", 3);
+	j2 ->addInstruction("bow", 1);
+	j2 ->addInstruction("walk", 5);
+	j2 ->addInstruction("bow", 1);
+
+	j2 ->addInstruction("bow", 1);
+	j2 ->addInstruction("walkb", 5 );
+	j2 ->addInstruction("bow", 1);
+	j2 ->addInstruction("turnA", 1);
+	j2 ->addInstruction("walkb", 8);
+	j2 ->addInstruction("bow", 1);
+	j2 ->addInstruction("wait", 4);
 	AddObjectToScene(j2);
 
 	Table *t = new Table();
