@@ -1,7 +1,6 @@
-#include "Light.h"
+#include "SpotLight.h"
 
-Light::Light(GLfloat d[], unsigned int GL_LIGHT)
-{
+SpotLight::SpotLight(GLfloat d[], unsigned int GL_LIGHT){
   // Set ambient colour of the light (off-grey)
   static GLfloat ambient[] = { 0.15f, 0.15f, 0.1f, 1.0f };
   // Set diffuse colour of the light (red)
@@ -15,12 +14,26 @@ Light::Light(GLfloat d[], unsigned int GL_LIGHT)
 }
 
 
-Light::~Light()
-{
+SpotLight::~SpotLight(){
 }
 
-void Light::Display()
-{
+void SpotLight::setFocus(Person *p){
+  focus = p;
+}
+
+void SpotLight::calibrate(){}
+
+void SpotLight::Update(const double& deltaTime){
+  //spot_direction[0] += deltaTime/10;
+  cout << focus -> getInfo()[0] + focus -> getInfo()[3] << endl;
+  float x = pos[0] - focus -> getInfo()[0] - focus -> getInfo()[3];
+  float y = pos[1] +100;
+  float z = pos[2] - focus -> getInfo()[2] - focus -> getInfo()[5];
+  spot_direction[0] = -x/y; 
+  spot_direction[2] = -z/y; 
+}
+
+void SpotLight::Display(){
   // Basic code to draw the position and direction of the light.
   // This is not suitable for a directional light source, as a 
   // directional light has no position.
@@ -46,8 +59,9 @@ void Light::Display()
   glLightfv(_GL_LIGHT, GL_SPECULAR, _specular);
   
   glLightf(_GL_LIGHT, GL_SPOT_CUTOFF, 9.0);
-  GLfloat spot_direction[] = { 0.0, -1.0, 0.0 };
   glLightfv(_GL_LIGHT, GL_SPOT_DIRECTION, spot_direction);
+  glLightfv(_GL_LIGHT, GL_SPOT_EXPONENT, spot_exponent);
+  
   
   glLightf(_GL_LIGHT, GL_LINEAR_ATTENUATION, 0.000001f);
   glLightf(_GL_LIGHT, GL_QUADRATIC_ATTENUATION, 0.0000025f);
@@ -58,3 +72,4 @@ void Light::Display()
   // enable GL_LIGHT0 with these defined properties
   glEnable(_GL_LIGHT); 
 }
+

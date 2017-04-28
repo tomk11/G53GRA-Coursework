@@ -3,7 +3,8 @@
 #include "Stadium.cpp"
 #include "Table.cpp"
 #include "Light.cpp"
-#include "Clock.cpp"
+#include "SpotLight.cpp"
+//#include "Clock.cpp"
 #include "Chair.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
@@ -18,15 +19,14 @@ void MyScene::Initialise()
 	s->size(100.0f);
 	s-> position(0,-100,0);
 	AddObjectToScene(s);
-	
 
 	Person *j1 = new Person();
 	Person *j2 = new Person();
 
-	/*
+	//*
 	j1 -> position(-350,-100,-350);
 	j2 -> position(350,-100,-350);
-	string j1Action[14] = {"bow","walk","turnA","bow", "walk", "bow", "judoThrow", "bow", "walkb", "bow", "turnC", "walkb", "bow", "wait" };
+	string j1Action[14] = {"bow","walk","turnA","bow", "walk", "bow", "wait", "bow", "walkb", "bow", "turnC", "walkb", "bow", "wait" };
 	string j2Action[14] = {"bow","walk","turnC","bow", "walk", "bow", "wait" , "bow", "walkb", "bow", "turnA", "walkb", "bow", "wait" };
     int j1Duration[14] =  { 1,    8,     3,      1,     5,      1,     3,       1,     5,       1,     1,       8,       1,     4};
     for (int i=0; i<14; i++){
@@ -39,11 +39,9 @@ void MyScene::Initialise()
     int j1Duration[3] =  { 1,      8,     4};
     for (int i=0; i<3; i++){
     //*/
-
     	j1 -> addInstruction(j1Action[i], j1Duration[i]);
     	j2 -> addInstruction(j2Action[i], j1Duration[i]);
     }
-
 
 	AddObjectToScene(j1);
 	AddObjectToScene(j2);
@@ -52,10 +50,10 @@ void MyScene::Initialise()
 	t -> position(0,-100,-450);
 	AddObjectToScene(t);
 
-	Clock *c = new Clock();
-	c -> position (0,20,-450);
-	c -> size(1);
-	AddObjectToScene(c);
+	//Clock *c = new Clock();
+	//c -> position (0,20,-450);
+	//c -> size(1);
+	//AddObjectToScene(c);
 
 	Chair *ch1 = new Chair();
 	ch1 -> position(-55,-100,-500);
@@ -66,13 +64,15 @@ void MyScene::Initialise()
 	AddObjectToScene(ch2);
 
     static GLfloat leftDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
-    Light *l = new Light(leftDiffuse , GL_LIGHT0 );
+    SpotLight *l = new SpotLight(leftDiffuse , GL_LIGHT0 );
+	l -> setFocus(j1);
 	l ->position(-200,700,0);
 	AddObjectToScene(l);
 
     static GLfloat rightDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
-    Light *r = new Light(rightDiffuse , GL_LIGHT1 );
+    SpotLight *r = new SpotLight(rightDiffuse , GL_LIGHT1 );
 	r ->position(200,700,0);
+	r -> setFocus(j2);
 	AddObjectToScene(r);
 }
 

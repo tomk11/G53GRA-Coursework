@@ -39,6 +39,7 @@ public:
     void judoThrow();
     void getThrown();
     float* getOpponentInfo();
+    float* getInfo();
 
     double sind(double angle);
     double cosd(double angle);
@@ -46,14 +47,10 @@ public:
 
 private:
 	float BodyAngle =0;
-	float RightKneeAngle = 0;
-	float LeftKneeAngle = 0;
-	float RightHipAngle = 0;
-	float LeftHipAngle = 0;
-	float RightElbowAngle = 0;
-	float LeftElbowAngle = 0;
-	float RightShoulderAngle = 0;
-	float LeftShoulderAngle = 0;
+	float RightKneeAngle = 0, LeftKneeAngle = 0;
+	float RightHipAngle = 0, LeftHipAngle = 0;
+	float RightElbowAngle = 0, LeftElbowAngle = 0;
+	float RightShoulderAngle = 0, LeftShoulderAngle = 0;
 
 	Person* opponent;
 	bool hasOpponent;
