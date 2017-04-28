@@ -4,12 +4,27 @@ Person::Person(){
 	// initialise the position modifier
 	positionModifier[1]= 100*(LowerLegDim[1]* cosd(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * cosd(BodyAngle)) ;
 	positionModifier[2]= 100*(LowerLegDim[1]* sind(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * sind(BodyAngle)) ;
+	addInstruction("dummy", 0);
 }
 
-Person::Person(string id){
-	ID = id;
-	addInstruction("dummy", 0);
-	Person();
+void Person::setOpponent(Person* p){
+	opponent = p;
+	hasOpponent = true;
+}
+
+float* Person::getOpponentInfo(){
+	float* pointer;
+	float info[8];
+	pointer = info;
+	info[0] = opponent -> pos[0];
+	info[1] = opponent -> pos[1];
+	info[2] = opponent -> pos[2];
+	info[3] = opponent -> positionModifier[0];
+	info[4] = opponent -> positionModifier[1];
+	info[5] = opponent -> positionModifier[2];
+	info[6] = opponent -> direction;
+	info[7] = opponent -> directionModifier;
+	return pointer;
 }
 
 
@@ -43,8 +58,6 @@ void Person::addInstruction(string instruction, float time){
 	  cout << totalInstructionTimes[i] << ' ';
 	}
 	cout << endl;
-	
-
 }
 
 void Person::turnC(){
@@ -90,11 +103,10 @@ void Person::walk(){
 	RightHipAngle = interp * WalkRightHipAngleFrames[keyframe] + (1-interp) * WalkRightHipAngleFrames[keyframe+1];
 	LeftKneeAngle = interp * WalkLeftKneeAngleFrames[keyframe] + (1-interp) * WalkLeftKneeAngleFrames[keyframe+1];
 	RightKneeAngle = interp * WalkRightKneeAngleFrames[keyframe] + (1-interp) * WalkRightKneeAngleFrames[keyframe+1];
-    
 }
 
 void Person::walkb(){
-	if (currentInstructionTime >= keyframe + 1){
+	if (currentInstructionTime > keyframe + 1){
 		keyframe += 1;
 		if (keyframe == 2){
 			SetPositionModifier("Right Foot");
@@ -115,94 +127,172 @@ void Person::walkb(){
 	RightHipAngle = interp * WalkBRightHipAngleFrames[keyframe] + (1-interp) * WalkBRightHipAngleFrames[keyframe+1];
 	LeftKneeAngle = interp * WalkBLeftKneeAngleFrames[keyframe] + (1-interp) * WalkBLeftKneeAngleFrames[keyframe+1];
 	RightKneeAngle = interp * WalkBRightKneeAngleFrames[keyframe] + (1-interp) * WalkBRightKneeAngleFrames[keyframe+1];
-    
 }
+
+void Person::judoThrow(){
+	if (currentInstructionTime >= keyframe + 1){
+		keyframe += 1;
+		if (keyframe == 1){
+			SetPositionModifier("Right Foot");
+		}
+	    
+	    if (keyframe == 8){
+		    currentInstructionTime=0;
+			keyframe = 0;
+		} 
+	}
+	else{}
+
+	interp = 1 +keyframe-currentInstructionTime;
+	LeftHipAngle = interp * throwLeftHipFrames[keyframe] + (1-interp) * throwLeftHipFrames[keyframe+1];
+	RightHipAngle = interp * throwRightHipFrames[keyframe] + (1-interp) * throwRightHipFrames[keyframe+1];
+	LeftKneeAngle = interp * throwLeftKneeFrames[keyframe] + (1-interp) * throwLeftKneeFrames[keyframe+1];
+	RightKneeAngle = interp * throwRightKneeFrames[keyframe] + (1-interp) * throwRightKneeFrames[keyframe+1];
+	BodyAngle = interp * throwBodyFrames[keyframe] + (1-interp) * throwBodyFrames[keyframe+1];
+	
+	directionModifier = interp * (throwDirectionFrames[keyframe]) + (1-interp)* throwDirectionFrames[keyframe + 1];
+}
+
+void Person::getThrown(){
+
+	if (hasOpponent == true){
+		float* info = getOpponentInfo();
+		pos[0] = info[0] + info[3]; 
+		pos[1] = info[1] + info[4]; 
+		pos[2] = info[2] + info[5]; 
+		direction = info[6];
+		directionModifier = info[7];
+		//cout << pos[0] << " " << pos[1] << " " << pos[2] << " " << positionModifier[0] << " " << positionModifier[1] << " " << positionModifier[2] << " " << direction << " " << directionModifier << endl;
+		//cout << info[0] << " " << info[1] << " " << info[2] << " " << info[3] << " " << info[4] << " " << info[5] << " " << info[6] << " " << info[7] << endl;
+	}
+}
+
 
 void Person::Update(const double& deltaTime)
 {
 	for (int i=1; i<instructions.size(); i++){
 		if (totalInstructionTimes[i-1] <= currentAnimationTime && currentAnimationTime < totalInstructionTimes[i]){
 			if (currentInstructionStage != i){
+				// This condition gets satisfied each time the animation moves onto a new stage. As such we reset to make sure everything is in order and get the new instruction
 				reset();
 				currentInstructionStage = i;
 			    keyframe = -1;
 			    currentInstructionTime = 0;
 			    totalInstructionTime = instructionTimes[i];
 			    currentInstruction = instructions[i];
-			    SetPositionModifier("Left Foot");
-				if (currentInstruction == "bow"){
-		            speed=2;
-				}
-				if(currentInstruction == "walk" || currentInstruction == "walkb"){
-		            speed=8;
-		        }
-		        if(directionModifier !=0){
-		        	direction = direction + directionModifier;
-		        	directionModifier = 0;
-		        }
+			    cout << currentInstruction << endl; 
+
+				if(currentInstruction == "bow"){ speed=2;}
+				if(currentInstruction == "judoThrow"){ speed=0.5;}
+				if(currentInstruction == "walk" || currentInstruction == "walkb"){ speed=8; SetPositionModifier("Left Foot"); }
+				if(currentInstruction == "getThrown"){ SetPositionModifier("Body");}
+		        if(directionModifier !=0){direction = direction + directionModifier;directionModifier = 0; }
 			}
 			if (currentInstruction == "bow"){bow();}
 			else if(currentInstruction == "walk"){walk();}
 			else if(currentInstruction == "walkb"){walkb();}
 			else if(currentInstruction == "turnA"){ turnA();}
 			else if(currentInstruction == "turnC"){ turnC();}
+			else if(currentInstruction == "judoThrow"){ judoThrow();}
+			else if(currentInstruction == "getThrown"){ getThrown();}
 		}
 	}
 	currentAnimationTime += speed * deltaTime;
 	currentInstructionTime += speed * deltaTime;
+
+}
+
+void Person::SetPositionModifier(string newPositionRef){
+	bool refChange = positionRef != newPositionRef;
+	float td = directionModifier + direction;
+
+	if (refChange){
+	    positionRef = newPositionRef;
+	    pos[2] += positionModifier[2];
+	    pos[0] += positionModifier[0];
+	}
+
+	// In our model the person is drawn from the center of his body. The position modifier allows us to set the location of the player by a particular body part. It edits the global position modifier at the beginning and the end of the routine.
+    if (positionRef == "Left Foot"){
+	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * cosd(BodyAngle)) ;
+	    positionModifierSizeX= 100*(LowerLegDim[1]* sind(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * sind(BodyAngle)) ;
+	}
+	else if (positionRef == "Right Foot"){
+		positionModifier[1] = 100*(LowerLegDim[1]* cosd(BodyAngle + RightHipAngle + RightKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + RightHipAngle) + BodyDim[1]/2*cosd(BodyAngle)) ;
+    	positionModifierSizeX= 100*(LowerLegDim[1]* sind(BodyAngle + RightHipAngle + RightKneeAngle) +UpperLegDim[1] * sind(BodyAngle + RightHipAngle) + BodyDim[1]/2*sind(BodyAngle)) ;
+    }
+    else if (positionRef == "Body"){
+    	if(currentInstruction == "getThrown"){
+    		BodyAngle = opponent -> BodyAngle;
+    	    positionModifier[0] = 0;
+    	    positionModifier[1] = 0;
+    	    positionModifier[2] = 100;
+
+    	}
+    	else{
+    	    positionModifier[0] = positionModifier[1] = positionModifier[2] = 0;
+    	    positionModifierSizeX = 0;
+    	}
+    }
+    	positionModifier[0] = positionModifierSizeX * sind(directionModifier + direction);
+    	positionModifier[2] = positionModifierSizeX * cosd(directionModifier +direction);
+
+	if (refChange){
+	    pos[2] -= positionModifier[2] ;
+	    pos[0] -= positionModifier[0] ;
+	}
+
 }
 
 
 // FUNCTIONS TO DISPLAY THE FUNCTION (HIERARCHICAL MODELING)
-void Person::Display()
-{
+void Person::Display(){
 	glPushMatrix();
 	SetPositionModifier();
-    glTranslatef(pos[0], pos[1], pos[2]);
-    glTranslatef(positionModifier[0], positionModifier[1], positionModifier[2]);
-	glRotatef(direction + directionModifier, 0,1,0);
+    
+    glTranslatef(pos[0], pos[1], pos[2]); // translate to the final position on the screen. This has to be done after all rotations to avoid travelling in a circle
+    glTranslatef(positionModifier[0], positionModifier[1], positionModifier[2]); // translate so the foot is on the origin 
+	glRotatef(directionModifier + direction, 0,1,0);
+	//glRotatef(direction, 0,1,0); // rotate the body on the spot
 	glScalef(scale[0], scale[0], scale[0]);
 	
 	glRotatef(BodyAngle,1,0,0);
-	glPushMatrix();
-	DrawBody();
+		glPushMatrix();
+		DrawBody();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, 50*BodyDim[1],0);
-	glTranslatef(0, 100*NeckDim[1],0);
-	DrawHead();
+		glTranslatef(0, 50*BodyDim[1],0);
+		glTranslatef(0, 100*NeckDim[1],0);
+		DrawHead();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
-	DrawLeftArm();
+		glTranslatef(50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
+		DrawLeftArm();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
-	DrawRightArm();
+		glTranslatef(-50*(BodyDim[0] + UpperArmDim[0]), 50*BodyDim[1],0);
+		DrawRightArm();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-25*BodyDim[0], -50*BodyDim[1],0);
-	DrawRightLeg();
+		glTranslatef(-25*BodyDim[0], -50*BodyDim[1],0);
+		DrawRightLeg();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(25*BodyDim[0], -50*BodyDim[1],0);
-	DrawLeftLeg();
+		glTranslatef(25*BodyDim[0], -50*BodyDim[1],0);
+		DrawLeftLeg();
+	glPopMatrix();
 	glPopMatrix();
 
-	glPopMatrix();
 }
-
 void Person::DrawBody(){
 	glScalef(BodyDim[0],BodyDim[1],BodyDim[2]);
 	glutSolidCube(100.0f);
 }
-
-
 void Person::DrawRightArm(){
 	glRotatef(RightShoulderAngle, 0,0,1);
     GLUquadricObj *p = gluNewQuadric();
@@ -242,9 +332,7 @@ void Person::DrawLeftArm(){
     gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
     glPopMatrix();
 }
-
 void Person::DrawRightLeg(){
-
     glRotatef(RightHipAngle,1,0,0);
 	glPushMatrix();
 	    glScalef(UpperLegDim[0],UpperLegDim[1],UpperLegDim[2]);
@@ -262,7 +350,6 @@ void Person::DrawRightLeg(){
         gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
 	glPopMatrix();
 }
-
 void Person::DrawLeftLeg(){
     glRotatef(LeftHipAngle,1,0,0);
 	glPushMatrix();
@@ -281,60 +368,19 @@ void Person::DrawLeftLeg(){
         gluCylinder(p,50,50,100,10,10);    // Draw Our Cylinder
 	glPopMatrix();
 }
-
 void Person::DrawHead(){
 	glScalef(HeadDim[0],HeadDim[1],HeadDim[2]);
 	glTranslatef(0, 100, 0);
 	glutSolidSphere(100.0f, 10,10);
-
 }
-
-double Person::sind(double angle)
-{
+double Person::sind(double angle){
 	double angleradians = angle * M_PI / 180.0f;
 	return sin(angleradians);
 }
-
-double Person::cosd(double angle)
-{
+double Person::cosd(double angle){
 	double angleradians = angle * M_PI / 180.0f;
 	return cos(angleradians);
 }
-
 void Person::SetPositionModifier(){
 	SetPositionModifier(string(positionRef));
 }
-
-void Person::SetPositionModifier(string newPositionRef){
-	bool change = positionRef != newPositionRef;
-
-	if (change){
-	    positionRef = newPositionRef;
-	    pos[2] += positionModifier[2];
-	    pos[0] += positionModifier[0];
-	}
-
-	// In our model the person is drawn from the center of his body. The position modifier allows us to set the location of the player by a particular body part. It edits the global position modifier at the beginning and the end of the routine.
-    if (positionRef == "Left Foot"){
-	    positionModifier[1]= 100*(LowerLegDim[1]* cosd(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * cosd(BodyAngle)) ;
-	    positionModifierSize= 100*(LowerLegDim[1]* sind(BodyAngle + LeftHipAngle + LeftKneeAngle) +UpperLegDim[1] * sind(BodyAngle + LeftHipAngle) + BodyDim[1]/2 * sind(BodyAngle)) ;
-    	positionModifier[0] = sind(direction) * positionModifierSize;
-    	positionModifier[2] = cosd(direction) * positionModifierSize;
-	}
-	else if (positionRef == "Right Foot"){
-		positionModifier[1] = 100*(LowerLegDim[1]* cosd(BodyAngle + RightHipAngle + RightKneeAngle) +UpperLegDim[1] * cosd(BodyAngle + RightHipAngle) + BodyDim[1]/2*cosd(BodyAngle)) ;
-    	positionModifierSize= 100*(LowerLegDim[1]* sind(BodyAngle + RightHipAngle + RightKneeAngle) +UpperLegDim[1] * sind(BodyAngle + RightHipAngle) + BodyDim[1]/2*sind(BodyAngle)) ;
-    	positionModifier[0] = sind(direction) * positionModifierSize;
-    	positionModifier[2] = cosd(direction) * positionModifierSize;
-    }
-    else if (positionRef == "Body"){
-    	positionModifier[0] = positionModifier[1] = positionModifier[2] = 0;
-    }
-
-	if (change){
-	    pos[2] -= positionModifier[2];
-	    pos[0] -= positionModifier[0];
-	}
-
-}
-

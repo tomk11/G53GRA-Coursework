@@ -18,55 +18,34 @@ void MyScene::Initialise()
 	s->size(100.0f);
 	s-> position(0,-100,0);
 	AddObjectToScene(s);
+	
 
-	/*Judoka *j1 = new Judoka(string("right"));
-	j1 -> position(350,-100,-350);
-	j1 -> size(1);
-	AddObjectToScene(j1);
+	Person *j1 = new Person();
+	Person *j2 = new Person();
 
-	Judoka *j2 = new Judoka(string("left"));
-	j2 -> position(-350,-100,-350);
-	j2 -> size(1);
-	AddObjectToScene(j2);
-	*/
-	Person *j1 = new Person(string("left"));
+	/*
 	j1 -> position(-350,-100,-350);
-	j1 -> size(1);
-	j1 ->addInstruction("bow", 1);
-	j1 ->addInstruction("walk", 8 );
-	j1 ->addInstruction("turnA",3);
-	j1 ->addInstruction("bow", 1);
-	j1 ->addInstruction("walk", 5);
-	j1 ->addInstruction("bow", 1);
-
-	//j1 ->addInstruction("throw", 3);
-
-	j1 ->addInstruction("bow", 1);
-	j1 ->addInstruction("walkb", 5 );
-	j1 ->addInstruction("bow", 1);
-	j1 ->addInstruction("turnC", 1);
-	j1 ->addInstruction("walkb", 8);
-	j1 ->addInstruction("bow", 1);
-	j1 ->addInstruction("wait", 4);
-	AddObjectToScene(j1);
-
-	Person *j2 = new Person(string("left"));
 	j2 -> position(350,-100,-350);
-	j2 -> size(1);
-	j2 ->addInstruction("bow", 1);
-	j2 ->addInstruction("walk", 8 );
-	j2 ->addInstruction("turnC", 3);
-	j2 ->addInstruction("bow", 1);
-	j2 ->addInstruction("walk", 5);
-	j2 ->addInstruction("bow", 1);
+	string j1Action[14] = {"bow","walk","turnA","bow", "walk", "bow", "judoThrow", "bow", "walkb", "bow", "turnC", "walkb", "bow", "wait" };
+	string j2Action[14] = {"bow","walk","turnC","bow", "walk", "bow", "wait" , "bow", "walkb", "bow", "turnA", "walkb", "bow", "wait" };
+    int j1Duration[14] =  { 1,    8,     3,      1,     5,      1,     3,       1,     5,       1,     1,       8,       1,     4};
+    for (int i=0; i<14; i++){
+	/*/
+	j1 -> position(-100,-100,0);
+	j2 -> position(100,-100,0);
+	j1 -> setOpponent(j2);
+	string j2Action[3] = {"turnA", "judoThrow", "wait" };
+	string j1Action[3] = {"turnC", "getThrown", "wait" };
+    int j1Duration[3] =  { 1,      8,     4};
+    for (int i=0; i<3; i++){
+    //*/
 
-	j2 ->addInstruction("bow", 1);
-	j2 ->addInstruction("walkb", 5 );
-	j2 ->addInstruction("bow", 1);
-	j2 ->addInstruction("turnA", 1);
-	j2 ->addInstruction("walkb", 8);
-	j2 ->addInstruction("bow", 1);
-	j2 ->addInstruction("wait", 4);
+    	j1 -> addInstruction(j1Action[i], j1Duration[i]);
+    	j2 -> addInstruction(j2Action[i], j1Duration[i]);
+    }
+
+
+	AddObjectToScene(j1);
 	AddObjectToScene(j2);
 
 	Table *t = new Table();

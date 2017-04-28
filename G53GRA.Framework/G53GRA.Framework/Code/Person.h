@@ -12,7 +12,6 @@ class Person :
 {
 public:
 	Person();
-	Person(string id);
 	~Person(){};
 
 	void Display();
@@ -26,6 +25,7 @@ public:
     void SetPositionModifier(string newPositionRef);
     void SetPositionModifier();
     void addInstruction(string instruction, float duration);
+    void setOpponent(Person* p);
 
     // These functions set the body position of the judoka
     void reset();
@@ -36,6 +36,9 @@ public:
     void turnA();
     void turnC();
     void wait();
+    void judoThrow();
+    void getThrown();
+    float* getOpponentInfo();
 
     double sind(double angle);
     double cosd(double angle);
@@ -51,6 +54,25 @@ private:
 	float LeftElbowAngle = 0;
 	float RightShoulderAngle = 0;
 	float LeftShoulderAngle = 0;
+
+	Person* opponent;
+	bool hasOpponent;
+
+	// Keyframes for Throw
+	const static int tFrames = 9;
+	/*
+	int throwRightHipFrames[tFrames] = {0, -20, -40, 0, 0, 0, 0, 0, 0};
+	int throwRightKneeFrames[tFrames] = {0, 20, 65, 0, 0, 0, 0, 0, 0};
+	int throwLeftHipFrames[tFrames] = {0, 20, -40, 0, 0, 0, 0, 0, 0};
+	int throwLeftKneeFrames[tFrames] = {0, 0, 65, 0, 0, 0, 0, 0, 0};
+	int throwDirectionFrames[tFrames] = {0, 40, 180, 180, 180, 360, 360, 360, 360};
+	*/
+	int throwRightHipFrames[tFrames] =  {0, -30, -30, -20,   0,   0,   0,   0,   0};
+	int throwRightKneeFrames[tFrames] = {0,   0,  50,   0,   0,   0,   0,   0,   0};
+	int throwLeftHipFrames[tFrames] =   {0,  20, -30, -20,   0,   0,   0,   0,   0};
+	int throwLeftKneeFrames[tFrames] =  {0,  20,  50,   0,   0,   0,   0,   0,   0};
+	int throwBodyFrames[tFrames] =      {0,   0,   0,  20,   0,   0,   0,   0,   0};
+	int throwDirectionFrames[tFrames] = {0,  40, 180, 180, 180, 360, 360, 360, 360};
 
 	// Keyframes for walking
 	int WalkRightHipAngleFrames[9] = {0, -10, -25, -10, 0, 10, 15, 10,0};
@@ -93,7 +115,7 @@ private:
 	int bowTime = 2;
 	int walkTime = 4;
 
-	// These parts define the relative dimentions of the player's body parts. They stat constant.
+	// These parts define the relative dimensions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};
 	float LowerArmDim[3] = {.1f, .25f, .1f};
 	float UpperArmDim[3] = {.13f, .25f, .13f};
@@ -104,7 +126,7 @@ private:
 
 	// This modifier is important. It is the key parameter that decides what position we are drawing from (i.e. when we call j -> setPosition()) what part of the body we are setting the position from
 	float positionModifier[3] = {0,0,0};
-	float positionModifierSize;
+	float positionModifierSizeX;
 	string positionRef = "Left Foot";
 	float directionModifier =0;
 
