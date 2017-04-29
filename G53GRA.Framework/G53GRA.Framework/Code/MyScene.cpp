@@ -63,17 +63,19 @@ void MyScene::Initialise()
 	ch2 -> position(55,-100,-500);
 	AddObjectToScene(ch2);
 
-    static GLfloat leftDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
-    SpotLight *l = new SpotLight(leftDiffuse , GL_LIGHT0 );
-	l -> setFocus(j1);
-	l ->position(-200,700,0);
-	AddObjectToScene(l);
+	Light *l1 = new Light(GL_LIGHT0);
+	l1-> position(0, 700, 0);
+	AddObjectToScene(l1);
 
-    static GLfloat rightDiffuse [] = { 0.8f , 0.8f , 0.8f , 1.0f };
-    SpotLight *r = new SpotLight(rightDiffuse , GL_LIGHT1 );
-	r ->position(200,700,0);
-	r -> setFocus(j2);
-	AddObjectToScene(r);
+    SpotLight *sl1 = new SpotLight(GL_LIGHT1 );
+	sl1 -> setFocus(j1);
+	sl1 ->position(-200,700,0);
+	AddObjectToScene(sl1);
+
+    SpotLight *sl2 = new SpotLight(GL_LIGHT2 );
+	sl2 -> setFocus(j2);
+	sl2 ->position(200,700,0);
+	AddObjectToScene(sl2);
 }
 
 /// set the perspective of camera

@@ -11,7 +11,7 @@ class SpotLight:
   public Input
 {
 public:
-  SpotLight(GLfloat d[], unsigned int GL_LIGHT);
+  SpotLight(unsigned int GL_LIGHT);
   ~SpotLight();
 
   // Could use to represent light source with sphere (optional)
@@ -19,6 +19,7 @@ public:
   void setFocus(Person *d);
   void calibrate();
   void Update(const double& deltaTime);
+  void HandleKey(unsigned char key, int state, int mX, int mY);
 
 private:
   // reflectance model parameters for LIGHT
@@ -27,6 +28,8 @@ private:
   Person *focus;
   GLfloat spot_direction[3] = { 0.0, -1.0, 0.0 };
   GLfloat spot_exponent[3] = { 85.0, 85.0, 85.0 };
+  GLfloat spot_cutoff = 9.0;
+  bool on=true;
 
   // flag for indicating positional or directional light source
   // 0.0f for directional, 1.0f for positional

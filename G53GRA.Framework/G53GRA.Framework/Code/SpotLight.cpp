@@ -1,16 +1,10 @@
 #include "SpotLight.h"
 
-SpotLight::SpotLight(GLfloat d[], unsigned int GL_LIGHT){
-  // Set ambient colour of the light (off-grey)
-  static GLfloat ambient[] = { 0.15f, 0.15f, 0.1f, 1.0f };
-  // Set diffuse colour of the light (red)
-  // Set specular colour (white)
-  static GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+SpotLight::SpotLight(unsigned int GL_LIGHT){
+  static GLfloat diffuse[] = {1.0f , 1.0f , 1.0f , 1.0f};
 
   _GL_LIGHT = GL_LIGHT;
-  _ambient = ambient;
-  _diffuse = d;
-  _specular = specular;
+  _diffuse = diffuse;
 }
 
 
@@ -19,18 +13,6 @@ SpotLight::~SpotLight(){
 
 void SpotLight::setFocus(Person *p){
   focus = p;
-}
-
-void SpotLight::calibrate(){}
-
-void SpotLight::Update(const double& deltaTime){
-  //spot_direction[0] += deltaTime/10;
-  cout << focus -> getInfo()[0] + focus -> getInfo()[3] << endl;
-  float x = pos[0] - focus -> getInfo()[0] - focus -> getInfo()[3];
-  float y = pos[1] +100;
-  float z = pos[2] - focus -> getInfo()[2] - focus -> getInfo()[5];
-  spot_direction[0] = -x/y; 
-  spot_direction[2] = -z/y; 
 }
 
 void SpotLight::Display(){
@@ -54,22 +36,41 @@ void SpotLight::Display(){
   // Re-enable lighting once the light source has been drawn
   glEnable(GL_LIGHTING);
 
-  glLightfv(_GL_LIGHT, GL_AMBIENT, _ambient);
   glLightfv(_GL_LIGHT, GL_DIFFUSE, _diffuse);
-  glLightfv(_GL_LIGHT, GL_SPECULAR, _specular);
   
-  glLightf(_GL_LIGHT, GL_SPOT_CUTOFF, 9.0);
+  glLightf(_GL_LIGHT, GL_SPOT_CUTOFF, spot_cutoff);
   glLightfv(_GL_LIGHT, GL_SPOT_DIRECTION, spot_direction);
   glLightfv(_GL_LIGHT, GL_SPOT_EXPONENT, spot_exponent);
-  
-  
-  glLightf(_GL_LIGHT, GL_LINEAR_ATTENUATION, 0.000001f);
-  glLightf(_GL_LIGHT, GL_QUADRATIC_ATTENUATION, 0.0000025f);
 
   GLfloat lPosition[4] = {pos[0], pos[1], pos[2], 1};
   glLightfv(_GL_LIGHT, GL_POSITION, lPosition);
 
-  // enable GL_LIGHT0 with these defined properties
   glEnable(_GL_LIGHT); 
 }
+
+void SpotLight::HandleKey(unsigned char key, int state, int mX, int mY){
+  if (state == 1 && key == 'm'){
+    on = !on;
+  }
+}
+
+void SpotLight::Update(const double& deltaTime){
+  float x = pos[0] - focus -> getInfo()[0] - focus -> getInfo()[3];
+  float y = pos[1] +100;
+  float z = pos[2] - focus -> getInfo()[2] - focus -> getInfo()[5];
+  spot_direction[0] = -x/y; 
+  spot_direction[2] = -z/y; 
+  if (on == true and _diffuse[0] < 1){
+    _diffuse[0] += deltaTime;
+    _diffuse[1] += deltaTime;
+    _diffuse[2] += deltaTime;
+  }
+  if (on == false and _diffuse[0] >0){
+    _diffuse[0] -= deltaTime;
+    _diffuse[1] -= deltaTime;
+    _diffuse[2] -= deltaTime;
+  }
+}
+
+
 
