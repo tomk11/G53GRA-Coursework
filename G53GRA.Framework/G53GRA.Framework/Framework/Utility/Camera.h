@@ -1,5 +1,4 @@
 #pragma once
-
 #ifdef _WIN32
 #include <GL/glut.h>
 #include <Windows.h>
@@ -10,6 +9,8 @@
 #endif
 
 #include "../Interface/Input.h"
+#include "VectorMath.h"
+#include "../../Code/Person.cpp"
 /**
 * This class implements the base Camera functionality. It controls the position and view direction
 * of the camera in your {@link Scene}. You may add functionality by creating a new class that inherits
@@ -31,6 +32,7 @@ public:
 	void GetForwardVector(float &x, float &y, float &z) const;
 	void GetRightVector(float &x, float &y, float &z) const;
 	void GetUpVector(float &x, float &y, float &z) const;
+	void TrackPlayer(Person *p);
 
 	/**
 	* Update the position of the camera and look-at vectors based on keyboard input.
@@ -102,15 +104,17 @@ private:
 	float right[3];
 	/** Vector representing upward orthogonal axes of your {@link Camera} space. */
 	float up[3];
+	string mode = "standard";
 
 	/**
 	 * Member variable used to track when a key is pressed between frames
 	 * so that we can do an update in the Update() function rather than HandleKey
 	 * function to obtain smooth motion */
-	int wKey, sKey, aKey, dKey, rKey, eKey;
+	int wKey, sKey, aKey, dKey, rKey, eKey, pKey, oKey, iKey ;
 
 	/** Current rendering window dimensions */
 	int windowWidth, windowHeight;
+	Person *player;
 
 	/** Variable to remember mouse click */
 	int currentButton;

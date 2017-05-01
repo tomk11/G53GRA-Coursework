@@ -1,5 +1,4 @@
 #include "MyScene.h"
-#include "Person.cpp"
 #include "Stadium.cpp"
 #include "Table.cpp"
 #include "Light.cpp"
@@ -26,10 +25,11 @@ void MyScene::Initialise()
 	//*
 	j1 -> position(-350,-100,-350);
 	j2 -> position(350,-100,-350);
-	string j1Action[14] = {"bow","walk","turnA","bow", "walk", "bow", "wait", "bow", "walkb", "bow", "turnC", "walkb", "bow", "wait" };
-	string j2Action[14] = {"bow","walk","turnC","bow", "walk", "bow", "wait" , "bow", "walkb", "bow", "turnA", "walkb", "bow", "wait" };
-    int j1Duration[14] =  { 1,    8,     3,      1,     5,      1,     3,       1,     5,       1,     1,       8,       1,     4};
-    for (int i=0; i<14; i++){
+	int actions =15;
+	string j1Action[actions] = {"wait", "bow","walk","turnA","bow", "walk", "bow", "wait", "bow", "walkb", "bow", "turnC", "walkb", "bow", "wait" };
+	string j2Action[actions] = {"wait", "bow","walk","turnC","bow", "walk", "bow", "wait" , "bow", "walkb", "bow", "turnA", "walkb", "bow", "wait" };
+    int j1Duration[actions] =  {5     ,  1,    8,     3,      1,     5,      1,     3,       1,     5,       1,     1,       8,       1,     4};
+    for (int i=0; i<actions; i++){
 	/*/
 	j1 -> position(-100,-100,0);
 	j2 -> position(100,-100,0);
@@ -46,21 +46,18 @@ void MyScene::Initialise()
 	AddObjectToScene(j1);
 	AddObjectToScene(j2);
 
+	camera.TrackPlayer(j1);
+
 	Table *t = new Table();
-	t -> position(0,-100,-450);
+	t -> position(0,-100,-400);
 	AddObjectToScene(t);
 
-	//Clock *c = new Clock();
-	//c -> position (0,20,-450);
-	//c -> size(1);
-	//AddObjectToScene(c);
-
 	Chair *ch1 = new Chair();
-	ch1 -> position(-55,-100,-500);
+	ch1 -> position(-55,-100,-450);
 	AddObjectToScene(ch1);
 
 	Chair *ch2 = new Chair();
-	ch2 -> position(55,-100,-500);
+	ch2 -> position(55,-100,-450);
 	AddObjectToScene(ch2);
 
 	Light *l1 = new Light(GL_LIGHT0);

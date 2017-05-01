@@ -1,8 +1,7 @@
 #include "SpotLight.h"
 
 SpotLight::SpotLight(unsigned int GL_LIGHT){
-  static GLfloat diffuse[] = {1.0f , 1.0f , 1.0f , 1.0f};
-
+  static GLfloat diffuse[] = {0.0f , 0.0f , 0.0f , 1.0f};
   _GL_LIGHT = GL_LIGHT;
   _diffuse = diffuse;
 }
@@ -49,17 +48,28 @@ void SpotLight::Display(){
 }
 
 void SpotLight::HandleKey(unsigned char key, int state, int mX, int mY){
-  if (state == 1 && key == 'm'){
-    on = !on;
-  }
+  //if (state == 1 && key == 'm'){
+    //on = !on;
+  //}
 }
 
 void SpotLight::Update(const double& deltaTime){
+  animationTime += deltaTime;
+  //  Make the spotlights follow the players
   float x = pos[0] - focus -> getInfo()[0] - focus -> getInfo()[3];
   float y = pos[1] +100;
   float z = pos[2] - focus -> getInfo()[2] - focus -> getInfo()[5];
   spot_direction[0] = -x/y; 
   spot_direction[2] = -z/y; 
+
+  //turn spotlights on during the animation
+  if (animationTime > 2  && animationTime < 28){
+    on = true;
+  } else{
+    on=false;
+  }
+
+  // fade spotlights in and out to intended brightness.
   if (on == true and _diffuse[0] < 1){
     _diffuse[0] += deltaTime;
     _diffuse[1] += deltaTime;
@@ -69,6 +79,10 @@ void SpotLight::Update(const double& deltaTime){
     _diffuse[0] -= deltaTime;
     _diffuse[1] -= deltaTime;
     _diffuse[2] -= deltaTime;
+  }
+
+  if (animationTime> 40 && loop==true){
+    animationTime = 0;
   }
 }
 

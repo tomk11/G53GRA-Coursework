@@ -105,13 +105,13 @@ protected:
 	* @param obj DisplayableObject to be added to the scene.
 	*/
 	void AddObjectToScene(DisplayableObject *obj);
-
-private:
 	/**
 	* Scene camera. Contains viewing properties. Defaults to framework {@link Camera} class.
 	* Overload {@link #Initialise()} to set a different {@link Camera}.
 	*/
 	static Camera camera;
+
+private:
 	/**
 	 * Texture manager for binding bitmap images as GL_TEXTURE2D IDs
 	 */

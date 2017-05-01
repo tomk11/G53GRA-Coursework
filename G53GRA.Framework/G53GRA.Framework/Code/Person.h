@@ -1,9 +1,12 @@
 #pragma once
-
+#include <math.h>
+#include <vector>
+#include <iostream>
 #include "../Framework/Interface/DisplayableObject.h"
 #include "../Framework/Interface/Animation.h"
 #include "../Framework/Interface/Input.h"
-#include <math.h>
+using namespace std;
+
 
 class Person :
 	public DisplayableObject,
@@ -57,13 +60,6 @@ private:
 
 	// Keyframes for Throw
 	const static int tFrames = 9;
-	/*
-	int throwRightHipFrames[tFrames] = {0, -20, -40, 0, 0, 0, 0, 0, 0};
-	int throwRightKneeFrames[tFrames] = {0, 20, 65, 0, 0, 0, 0, 0, 0};
-	int throwLeftHipFrames[tFrames] = {0, 20, -40, 0, 0, 0, 0, 0, 0};
-	int throwLeftKneeFrames[tFrames] = {0, 0, 65, 0, 0, 0, 0, 0, 0};
-	int throwDirectionFrames[tFrames] = {0, 40, 180, 180, 180, 360, 360, 360, 360};
-	*/
 	int throwRightHipFrames[tFrames] =  {0, -30, -30, -20,   0,   0,   0,   0,   0};
 	int throwRightKneeFrames[tFrames] = {0,   0,  50,   0,   0,   0,   0,   0,   0};
 	int throwLeftHipFrames[tFrames] =   {0,  20, -30, -20,   0,   0,   0,   0,   0};
@@ -100,26 +96,19 @@ private:
     vector<float> instructionTimes; 
     vector<float> totalInstructionTimes; 
 
-    float currentAnimationTime = 0;
-    float currentInstructionTime = 0;
-    float totalAnimationTime = 0;
-    float totalInstructionTime = 0;
+    float currentAnimationTime = 0, currentInstructionTime = 0, totalAnimationTime = 0, totalInstructionTime = 0, absoluteAnimationTime;
     int currentInstructionStage = 0;
     string currentInstruction;
 	int keyframe;
 	float interp;
 	float speed =1;
-	int bowTime = 2;
-	int walkTime = 4;
+	int bowTime = 2, walkTime = 4;
 
 	// These parts define the relative dimensions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};
-	float LowerArmDim[3] = {.1f, .25f, .1f};
-	float UpperArmDim[3] = {.13f, .25f, .13f};
-	float LowerLegDim[3] = {.12f, .45f, .12f};
-	float UpperLegDim[3] = {.16f, .4f, .16f};
-	float HeadDim[3] = {.15, .15, .15};
-	float NeckDim[3] = {.08, .08, .08};
+	float LowerArmDim[3] = {.1f, .25f, .1f}, UpperArmDim[3] = {.13f, .25f, .13f};
+	float LowerLegDim[3] = {.12f, .45f, .12f}, UpperLegDim[3] = {.16f, .4f, .16f};
+	float HeadDim[3] = {.15, .15, .15}, NeckDim[3] = {.08, .08, .08};
 
 	// This modifier is important. It is the key parameter that decides what position we are drawing from (i.e. when we call j -> setPosition()) what part of the body we are setting the position from
 	float positionModifier[3] = {0,0,0};

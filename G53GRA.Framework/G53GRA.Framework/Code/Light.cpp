@@ -3,7 +3,7 @@
 Light::Light(unsigned int GL_LIGHT)
 {
   static GLfloat ambient[] = { 0.15f, 0.15f, 0.1f, 1.0f };
-  static GLfloat diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+  static GLfloat diffuse[] = { 3.0f, 3.0f, 3.0f, 1.0f };
   static GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat ambientOn[] = {ambient[0], ambient[1], ambient[2]};
   static GLfloat diffuseOn[] = {diffuse[0], diffuse[1], diffuse[2]};
@@ -60,12 +60,21 @@ void Light::Display()
 }
 
 void Light::HandleKey(unsigned char key, int state, int mX, int mY){
-  if (state == 1 && key == 'n'){
-    on = !on;
-  }
 }
 
 void Light::Update(const double& deltaTime){
+
+
+  //turn main lights off during the animation
+  if (animationTime < 2  || animationTime > 28){
+    on = true;
+  } else{
+    on=false;
+  }
+
+  animationTime += deltaTime;
+
+  // fade lights to intended brightness
     if (on == true){
       if (_diffuse[0] < _diffuseOn[0]){
       _diffuse[0] += deltaTime * _diffuseOn[0];
@@ -90,5 +99,9 @@ void Light::Update(const double& deltaTime){
       _specular[1] -= deltaTime * _specularOn[1];
       _specular[2] -= deltaTime * _specularOn[2];
     }
+  }
+
+  if (animationTime> 40 && loop == true){
+    animationTime = 0;
   }
 }

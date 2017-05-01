@@ -15,34 +15,40 @@ void Stadium::Display()
 
   for(int r=0; r<360; r+=90){
     glPushMatrix();
-    glRotatef(r, 0,1,0);
-    if (r==0){
-      glTranslatef(0,0.01,-1);
-    }
-    glTranslatef(0, 0, -(compSize+boundarySize+ 4)/2);
-    glPushMatrix();
-    glTranslatef(0,.75,0);
-    DrawSeating();
-    glPopMatrix();
-    glTranslatef(0,0,.5);
-    glScalef(0.75, 0.748, 0.75);
-    glTranslatef(4, 0, 0);
-    DrawAdvertisementStrip();
-    glPushMatrix();
-    glScalef(2,1,1);
-    glTranslatef(1,0,0);
-    DrawSponsorAdvertisement("../Textures/white.bmp");
-    glPopMatrix();
-    glTranslatef(-4, 0, 0);
-    DrawAdvertisementStrip();
-    glTranslatef(-4, 0, 0);
-    DrawAdvertisementStrip();
-    glTranslatef(-2, 0, 0);
-    glPushMatrix();
-    glScalef(2,1,1);
-    glTranslatef(-1,0,0);
-    DrawSponsorAdvertisement("../Textures/white.bmp");
-    glPopMatrix();
+      glRotatef(r, 0,1,0);
+      //if (r==0){
+      //  glTranslatef(0,0.01,-1);
+      //}
+      glTranslatef(0, 0, -(compSize+boundarySize+ 5)/2);
+    
+      glPushMatrix();
+        glTranslatef(0,.75,0);
+        DrawSeating();
+      glPopMatrix();
+    
+      glTranslatef(0,0,.5);
+      glScalef(0.75, 0.748, 0.75);
+      glTranslatef(4, 0, 0);
+      DrawAdvertisementStrip();
+    
+      glPushMatrix();
+        glScalef(2,1,1);
+        glTranslatef(1,0,0);
+        DrawSponsorAdvertisement("../Textures/white.bmp");
+      glPopMatrix();
+    
+      glTranslatef(-4, 0, 0);
+      DrawAdvertisementStrip();
+      glTranslatef(-4, 0, 0);
+      DrawAdvertisementStrip();
+      glTranslatef(-2, 0, 0);
+    
+      glPushMatrix();
+        glScalef(2,1,1);
+        glTranslatef(-1,0,0);
+        DrawSponsorAdvertisement("../Textures/white.bmp");
+      glPopMatrix();
+    
     glPopMatrix();
   }
 
@@ -105,9 +111,9 @@ void Stadium::DrawMat(){
   float p = 20;
   float sf = scale[0]/p;
   glScalef(sf,sf,sf);
-  float inner = (compSize) * p / 2;
-  float outer = (compSize + boundarySize) * p / 2;
-  float entire = (compSize + boundarySize + 3) * p / 2;
+  float inner = (compSize+1) * p / 2;
+  float outer = (compSize + boundarySize + 1) * p / 2;
+  float entire = (compSize + boundarySize + 5) * p / 2;
   glBegin(GL_QUADS);
   glMaterialfv(GL_FRONT, GL_SPECULAR, static_cast<GLfloat*>(specular));
   glMaterialf(GL_FRONT, GL_SHININESS, static_cast<GLfloat>(shininess));

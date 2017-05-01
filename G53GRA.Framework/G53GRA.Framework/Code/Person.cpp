@@ -196,6 +196,17 @@ void Person::Update(const double& deltaTime)
   }
   currentAnimationTime += speed * deltaTime;
   currentInstructionTime += speed * deltaTime;
+  absoluteAnimationTime += deltaTime;
+
+  if (absoluteAnimationTime >40 && loop == true){
+    absoluteAnimationTime = 0;
+    currentAnimationTime = 0;
+    currentInstructionTime =0;
+    currentInstructionStage = -1;
+    direction=0; 
+    pos[2] = -350;
+    reset();
+  }
 
 }
 

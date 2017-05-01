@@ -25,6 +25,7 @@ private:
   GLfloat *_ambientOn, *_diffuseOn, *_specularOn;
   unsigned int _GL_LIGHT;
   bool on=true;
+  float animationTime=0;
 
   // flag for indicating positional or directional light source
   // 0.0f for directional, 1.0f for positional
