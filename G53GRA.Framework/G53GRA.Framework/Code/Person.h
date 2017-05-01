@@ -7,32 +7,34 @@
 #include "../Framework/Interface/Input.h"
 using namespace std;
 
-
 class Person :
-	public DisplayableObject,
+	public DisplayableObject, 
 	public Animation,
 	public Input
 {
 public:
 	Person();
 	~Person(){};
-
-	void Display();
     void Update(const double& deltaTime);
+
+    // Display functions. These are used for hierachical modelling.
+	void Display();
 	void DrawBody();
 	void DrawHead();
 	void DrawLeftLeg();
 	void DrawRightLeg();
 	void DrawLeftArm();
 	void DrawRightArm();
+    void reset();
+
+	// Position functions 
     void SetPositionModifier(string newPositionRef);
     void SetPositionModifier();
-    void addInstruction(string instruction, float duration);
-    void setOpponent(Person* p);
 
-    // These functions set the body position of the judoka
-    void reset();
-    void ippon();
+    // This is the control function.
+    void addInstruction(string instruction, float duration);
+
+    // Animation functions
     void bow();
     void walk();
     void walkb();
@@ -41,12 +43,15 @@ public:
     void wait();
     void judoThrow();
     void getThrown();
+    
+    // Functions that allow our objects to talk to one another
+    void setOpponent(Person* p);
     float* getOpponentInfo();
     float* getInfo();
 
+    // Helper Functions
     double sind(double angle);
     double cosd(double angle);
-    
 
 private:
 	float BodyAngle =0;
@@ -87,7 +92,6 @@ private:
 	int BowRightHipAngleFrames[4] = {0,-70,0, -70};
 	int BowLeftHipAngleFrames[4] = {0,-70,0, -70};
 
-	float direction = 0;
 
 	//Variables used for animation
     // INSTRUCTION refers to a variable that tracks just a single segment of the animation and ANIMATION refers to variables that track the whole sequence.
@@ -97,12 +101,9 @@ private:
     vector<float> totalInstructionTimes; 
 
     float currentAnimationTime = 0, currentInstructionTime = 0, totalAnimationTime = 0, totalInstructionTime = 0, absoluteAnimationTime;
-    int currentInstructionStage = 0;
+    int currentInstructionStage = 0, keyframe=0;
     string currentInstruction;
-	int keyframe;
-	float interp;
-	float speed =1;
-	int bowTime = 2, walkTime = 4;
+	float bowTime = 2, walkTime = 4, speed=1, interp=0;
 
 	// These parts define the relative dimensions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};
@@ -114,7 +115,5 @@ private:
 	float positionModifier[3] = {0,0,0};
 	float positionModifierSizeX;
 	string positionRef = "Left Foot";
-	float directionModifier =0;
-
-	string ID;
+	float direction = 0, directionModifier =0;
 };

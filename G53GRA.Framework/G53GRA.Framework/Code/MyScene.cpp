@@ -3,8 +3,8 @@
 #include "Table.cpp"
 #include "Light.cpp"
 #include "SpotLight.cpp"
-//#include "Clock.cpp"
 #include "Chair.cpp"
+#include "VideoCamera.cpp"
 
 MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidth, const int& windowHeight)
 	: Scene(argc, argv, title, windowWidth, windowHeight){}
@@ -48,31 +48,47 @@ void MyScene::Initialise()
 
 	camera.TrackPlayer(j1);
 
+
+	// Add the table and chairs that the judges sit at.
 	Table *t = new Table();
 	t -> position(0,-100,-400);
 	AddObjectToScene(t);
-
 	Chair *ch1 = new Chair();
 	ch1 -> position(-55,-100,-450);
 	AddObjectToScene(ch1);
-
 	Chair *ch2 = new Chair();
 	ch2 -> position(55,-100,-450);
 	AddObjectToScene(ch2);
 
+	// Lighting. We have two spotlights that follow the two players and a main light that illumates the entire arena
 	Light *l1 = new Light(GL_LIGHT0);
 	l1-> position(0, 700, 0);
 	AddObjectToScene(l1);
-
     SpotLight *sl1 = new SpotLight(GL_LIGHT1 );
-	sl1 -> setFocus(j1);
+	sl1 -> setFocus(j1); // we send a pointer to the player so that the spotlight can follow it
 	sl1 ->position(-200,700,0);
-	AddObjectToScene(sl1);
-
-    SpotLight *sl2 = new SpotLight(GL_LIGHT2 );
+	AddObjectToScene(sl1); // we send a pointer to the player so that the spotlight can follow it
+    SpotLight *sl2 = new SpotLight(GL_LIGHT2 ); 
 	sl2 -> setFocus(j2);
 	sl2 ->position(200,700,0);
 	AddObjectToScene(sl2);
+
+	// Draw our cameramen and cameras
+	VideoCamera *v1 = new VideoCamera();
+	v1 ->position(460,0,-180);
+	v1 ->orientation(0,-90,0);
+	AddObjectToScene(v1);
+
+	VideoCamera *v2 = new VideoCamera();
+	v2 ->position(460,0,0);
+	v2 ->orientation(0,-90,0);
+	AddObjectToScene(v2);
+
+	VideoCamera *v3 = new VideoCamera();
+	v3 ->position(460,0,180);
+	v3 ->orientation(0,-90,0);
+	AddObjectToScene(v3);
+
 }
 
 /// set the perspective of camera

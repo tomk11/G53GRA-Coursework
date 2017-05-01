@@ -69,7 +69,7 @@ void Light::Update(const double& deltaTime){
   if (animationTime < 2  || animationTime > 28){
     on = true;
   } else{
-    on=false;
+    //on=false;
   }
 
   animationTime += deltaTime;

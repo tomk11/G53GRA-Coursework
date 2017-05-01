@@ -160,8 +160,6 @@ void Person::getThrown(){
     pos[2] = info[2] + info[5]; 
     //direction = info[6];
     //directionModifier = info[7];
-    //cout << pos[0] << " " << pos[1] << " " << pos[2] << " " << positionModifier[0] << " " << positionModifier[1] << " " << positionModifier[2] << " " << direction << " " << directionModifier << endl;
-    //cout << info[0] << " " << info[1] << " " << info[2] << " " << info[3] << " " << info[4] << " " << info[5] << " " << info[6] << " " << info[7] << endl;
   }
 }
 
