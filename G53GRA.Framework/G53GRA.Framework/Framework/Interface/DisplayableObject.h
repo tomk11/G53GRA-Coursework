@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "../Engine/Scene.h"
 /**
 * Virtual class to be inherited by all objects to be displayed in Scene
 * <p>

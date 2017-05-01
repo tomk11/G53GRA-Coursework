@@ -1,8 +1,6 @@
 #include "Camera.h"
-#include "VectorMath.h"
-#include "Scene.h"
 
-Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), currentButton(0), mouseX(0), mouseY(0)
+Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), rKey(0), eKey(0), currentButton(0), mouseX(0), mouseY(0)
 {
 	Reset();
 }
@@ -10,12 +8,14 @@ Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), currentButton(0), mouseX(
 void Camera::Reset(){
 	// set the camera position to start at (0,0,0)
 	eyePosition[0] = 0.0f;
-	eyePosition[1] = 0.0f;
-	eyePosition[2] = 0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
+	eyePosition[1] = 70.0f;
+	eyePosition[1] = 200.0f;
+	eyePosition[2] =  0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
+	eyePosition[2] = 300 + 0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
 
 	// set the view direction vector of the camera to be (0,0,-1)
 	vd[0] = 0.0f;
-	vd[1] = 0.0f;
+	vd[1] = -0.3f;
 	vd[2] = -1.0f;
 
 	// set the planar forward direction vector of the camera to be (0,0,-1)
@@ -49,10 +49,46 @@ void Camera::SetupCamera()
 
 }
 
+void Camera::TrackPlayer(Person *p){
+	player = p;
+}
+
 void Camera::Update(const double& deltaTime)
 {
 	float speed = 1.0f;
 
+	if (oKey){
+		mode="thirdPerson";
+	}
+
+	if (iKey){
+		mode="standard";
+	}
+
+	if (pKey){
+		mode="firstPerson";
+	}
+
+	if (mode == "firstPerson"){
+		float *info = player -> getInfo();
+		eyePosition[0] = info[0] + info[3];
+		eyePosition[1] = info[1] + info[4] +100;
+		eyePosition[2] = info[2] + info[5];
+		float d = (info[6] + info[7]) * 3.1415926/180;
+		vd[0] = sin(d);
+		vd[2] = cos(d);
+	}
+
+	else if (mode == "thirdPerson"){
+		float *info = player -> getInfo();
+		float d = (info[6] + info[7]) * 3.1415926/180;
+		vd[0] = sin(d);
+		vd[2] = cos(d);
+		eyePosition[0] = info[0] + info[3] - vd[0] *100;
+		eyePosition[1] = info[1] + info[4] +100;
+		eyePosition[2] = info[2] + info[5] - vd[2] * 100;
+	}
+	else{
 	if (aKey)
 		sub(eyePosition, right, speed);
 
@@ -64,6 +100,14 @@ void Camera::Update(const double& deltaTime)
 
 	if (sKey)
 		sub(eyePosition, forward, speed);
+
+	if (eKey)
+		add(eyePosition, up, speed);
+
+	if (rKey)
+		sub(eyePosition, up, speed);
+
+	}
 
 	SetupCamera();
 }
@@ -107,6 +151,18 @@ void Camera::HandleKey(unsigned char key, int state, int x, int y)
 {
 	switch (key)
 	{
+		case 'O':
+		case 'o':
+		    oKey = state;
+		    break;
+		case 'I':
+		case 'i':
+		    iKey = state;
+		    break;
+		case 'P':
+		case 'p':
+		    pKey = state;
+		    break;
 		case 'A':
 		case 'a':
 			aKey = state;
@@ -123,8 +179,17 @@ void Camera::HandleKey(unsigned char key, int state, int x, int y)
 		case 's':
 			sKey = state;
 			break;
+		case 'E':
+		case 'e':
+			eKey = state;
+			break;
+		case 'R':
+		case 'r':
+			rKey = state;
+			break;
 		case ' ':
 			Reset();
+			mode="standard";
 		default:
 			break;
 	}
@@ -139,6 +204,7 @@ void Camera::HandleMouse(int button, int state, int x, int y)
 
 void Camera::HandleMouseDrag(int x, int y)
 {
+	if (mode=="standard"){
 	float rx, ry;
 	float sensitivity = 0.01f; // speed of the camera moving
 
@@ -188,4 +254,5 @@ void Camera::HandleMouseDrag(int x, int y)
 
 	mouseX = x;
 	mouseY = y;
+}
 }

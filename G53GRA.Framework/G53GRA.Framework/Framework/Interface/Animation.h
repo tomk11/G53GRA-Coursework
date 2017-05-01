@@ -18,4 +18,5 @@ public:
 	* @param deltaTime change in time since previous call
 	*/
 	virtual void Update(const double& deltaTime) = 0;
+    bool loop=false;
 };

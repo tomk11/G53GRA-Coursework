@@ -2,6 +2,8 @@
 #include "../Interface/Input.h"
 #include "Scene.h"
 #include "../Interface/DisplayableObject.h"
+#include "../Utility/Camera.cpp"
+#include "../Utility/Texture.cpp"
 #include <cstdlib>
 
 Texture Scene::texture = Texture();		// Initialise Texture handler
