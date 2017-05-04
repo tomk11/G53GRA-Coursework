@@ -73,7 +73,7 @@ void Stadium::DrawRoof(){
   float h1=4.25;
   float h2=8;
 
-  float length = compSize + boundarySize+2.5;
+  float length = compSize + boundarySize+2;
   glNormal3f(0.0f, 1.0f, 0.0f);
   glVertex3f(length, h2, length);
   glVertex3f(-length, h2, length);

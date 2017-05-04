@@ -53,6 +53,19 @@ public:
     double sind(double angle);
     double cosd(double angle);
 
+	//Variables used for animation
+    // INSTRUCTION refers to a variable that tracks just a single segment of the animation and ANIMATION refers to variables that track the whole sequence.
+    // Also CURRENT refers to variables that track the current state while TOTAL refers to the time at the end of this sequence
+    vector<string> instructions;
+    vector<float> instructionTimes; 
+    vector<float> totalInstructionTimes; 
+
+    float currentAnimationTime = 0, currentInstructionTime = 0, totalAnimationTime = 0, totalInstructionTime = 0, absoluteAnimationTime;
+    int currentInstructionStage = 0, keyframe=0;
+    string currentInstruction;
+	float bowTime = 2, walkTime = 4, speed=1, interp=0;
+
+
 private:
 	float BodyAngle =0;
 	float RightKneeAngle = 0, LeftKneeAngle = 0;
@@ -65,12 +78,12 @@ private:
 
 	// Keyframes for Throw
 	const static int tFrames = 9;
-	int throwRightHipFrames[tFrames] =  {0, -30, -30, -20,   0,   0,   0,   0,   0};
+	int throwRightHipFrames[tFrames] =  {0, -30, -30, -60,   0,   0,   0,   0,   0};
 	int throwRightKneeFrames[tFrames] = {0,   0,  50,   0,   0,   0,   0,   0,   0};
-	int throwLeftHipFrames[tFrames] =   {0,  20, -30, -20,   0,   0,   0,   0,   0};
+	int throwLeftHipFrames[tFrames] =   {0,  20, -30, -60,   0,   0,   0,   0,   0};
 	int throwLeftKneeFrames[tFrames] =  {0,  20,  50,   0,   0,   0,   0,   0,   0};
-	int throwBodyFrames[tFrames] =      {0,   0,   0,  20,   0,   0,   0,   0,   0};
-	int throwDirectionFrames[tFrames] = {0,  40, 180, 180, 180, 360, 360, 360, 360};
+	int throwBodyFrames[tFrames] =      {0,   0,   0,  50,   0,   0,   0,   0,   0};
+	int throwDirectionFrames[tFrames] = {0,  15, 180, 180, 180, 360, 360, 360, 360};
 
 	// Keyframes for walking
 	int WalkRightHipAngleFrames[9] = {0, -10, -25, -10, 0, 10, 15, 10,0};
@@ -92,18 +105,6 @@ private:
 	int BowRightHipAngleFrames[4] = {0,-70,0, -70};
 	int BowLeftHipAngleFrames[4] = {0,-70,0, -70};
 
-
-	//Variables used for animation
-    // INSTRUCTION refers to a variable that tracks just a single segment of the animation and ANIMATION refers to variables that track the whole sequence.
-    // Also CURRENT refers to variables that track the current state while TOTAL refers to the time at the end of this sequence
-    vector<string> instructions;
-    vector<float> instructionTimes; 
-    vector<float> totalInstructionTimes; 
-
-    float currentAnimationTime = 0, currentInstructionTime = 0, totalAnimationTime = 0, totalInstructionTime = 0, absoluteAnimationTime;
-    int currentInstructionStage = 0, keyframe=0;
-    string currentInstruction;
-	float bowTime = 2, walkTime = 4, speed=1, interp=0;
 
 	// These parts define the relative dimensions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};

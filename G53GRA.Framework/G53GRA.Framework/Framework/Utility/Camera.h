@@ -85,6 +85,9 @@ public:
 	*/
 	virtual void SetupCamera();
 
+
+    int SignOf(float x);
+
 private:
 	/**
 	* Vectors containing eye coordinates, i.e. the position of the camera.

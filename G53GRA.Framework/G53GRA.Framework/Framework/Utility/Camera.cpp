@@ -55,7 +55,7 @@ void Camera::TrackPlayer(Person *p){
 
 void Camera::Update(const double& deltaTime)
 {
-	float speed = 1.0f;
+	float speed = 3.0f;
 
 	if (oKey){
 		mode="thirdPerson";
@@ -109,7 +109,49 @@ void Camera::Update(const double& deltaTime)
 
 	}
 
+	// Run checks to make sure camera is in an allowed position
+	float maxHeight = 700;
+	float minHeight = -100;
+
+	if (eyePosition[1] >= maxHeight -2){
+		eyePosition[1] = maxHeight - 2;
+	} 
+	if (eyePosition[1] <= minHeight + 2){
+		eyePosition[1] = minHeight + 2;
+	}
+	float maxWidth = 900;
+	if (eyePosition[1] < 300){
+		maxWidth -= 50*  floor((300 - eyePosition[1])/50);
+	}
+	maxWidth -= 5;
+	if (abs(eyePosition[2]) - maxWidth > 0){
+		// Decide whether to move upwards or towards the center
+		if(abs(eyePosition[2]) - maxWidth <5){
+			eyePosition[2] = SignOf(eyePosition[2]) * maxWidth;
+		}
+		else{
+			eyePosition[1] = ceil(eyePosition[1]/50) * 50;
+		}
+	}
+	if (abs(eyePosition[0]) - maxWidth > 0){
+		if(abs(eyePosition[0]) - maxWidth <5){
+			eyePosition[0] = SignOf(eyePosition[0]) * maxWidth;
+		}
+		else{
+			eyePosition[1] = ceil(eyePosition[1]/50) * 50;
+		}
+	}
+
+	
+
+
 	SetupCamera();
+}
+
+int Camera::SignOf(float x){
+	if (x > 0) return 1;
+	if (x < 0) return -1;
+	return 0;
 }
 
 void Camera::GetEyePosition(float &x, float &y, float &z) const

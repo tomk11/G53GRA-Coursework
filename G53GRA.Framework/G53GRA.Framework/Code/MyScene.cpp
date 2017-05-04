@@ -19,10 +19,12 @@ void MyScene::Initialise()
 	s-> position(0,-100,0);
 	AddObjectToScene(s);
 
+
+    // COMPETITORS
 	Person *j1 = new Person();
 	Person *j2 = new Person();
 
-	//*
+    //*
 	j1 -> position(-350,-100,-350);
 	j2 -> position(350,-100,-350);
 	int actions =15;
@@ -33,11 +35,12 @@ void MyScene::Initialise()
 	/*/
 	j1 -> position(-100,-100,0);
 	j2 -> position(100,-100,0);
+	j2 -> setOpponent(j1);
 	j1 -> setOpponent(j2);
-	string j2Action[3] = {"turnA", "judoThrow", "wait" };
-	string j1Action[3] = {"turnC", "getThrown", "wait" };
-    int j1Duration[3] =  { 1,      8,     4};
-    for (int i=0; i<3; i++){
+	string j1Action[4] = {"turnA", "walk", "judoThrow", "wait" };
+	string j2Action[4] = {"turnC", "wait", "getThrown", "wait" };
+    int j1Duration[4] =  { 1,2,      8,     4};
+    for (int i=0; i<4; i++){
     //*/
     	j1 -> addInstruction(j1Action[i], j1Duration[i]);
     	j2 -> addInstruction(j2Action[i], j1Duration[i]);
@@ -49,7 +52,7 @@ void MyScene::Initialise()
 	camera.TrackPlayer(j1);
 
 
-	// Add the table and chairs that the judges sit at.
+	// TABLE AND CHAIRS
 	Table *t = new Table();
 	t -> position(0,-100,-400);
 	AddObjectToScene(t);
@@ -60,7 +63,8 @@ void MyScene::Initialise()
 	ch2 -> position(55,-100,-450);
 	AddObjectToScene(ch2);
 
-	// Lighting. We have two spotlights that follow the two players and a main light that illumates the entire arena
+	// LIGHTING 
+	// We have two spotlights that follow the two players and a main light that illumates the entire arena
 	Light *l1 = new Light(GL_LIGHT0);
 	l1-> position(0, 700, 0);
 	AddObjectToScene(l1);
@@ -73,7 +77,7 @@ void MyScene::Initialise()
 	sl2 ->position(200,700,0);
 	AddObjectToScene(sl2);
 
-	// Draw our cameramen and cameras
+	// CAMERAS (i.e photographers on the mat edge)
 	VideoCamera *v1 = new VideoCamera();
 	v1 ->position(460,0,-180);
 	v1 ->orientation(0,-90,0);
