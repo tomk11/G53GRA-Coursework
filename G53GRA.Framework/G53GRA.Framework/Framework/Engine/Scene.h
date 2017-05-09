@@ -13,7 +13,6 @@
 #include "../Utility/Texture.h"	//! Handles Texture loading for bitmap images
 #include "../Utility/Camera.h"  //! Camera class
 #include <vector>		//! Utility for maintaining DispalyableObjects in system
-
 class DisplayableObject; // Anonymous
 
 class Scene : public Engine

@@ -15,9 +15,9 @@ public:
 	void DrawSeat();
 	void DrawBack();
 private:
-	float LegHeight = 60;
-	float Thickness = 8;
-	float SeatSize =80;
+	float LegHeight = 50;
+	float Thickness = 7;
+	float SeatSize =60;
 	float LegPositionH = (SeatSize - Thickness)/2;
 	float LegPositionV = (LegHeight + Thickness)/2;
 	

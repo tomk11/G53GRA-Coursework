@@ -3,7 +3,7 @@
 Light::Light(unsigned int GL_LIGHT)
 {
   static GLfloat ambient[] = { 0.15f, 0.15f, 0.1f, 1.0f };
-  static GLfloat diffuse[] = { 3.0f, 3.0f, 3.0f, 1.0f };
+  static GLfloat diffuse[] = { 1.5f, 1.5f, 1.5f, 1.0f };
   static GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat ambientOn[] = {ambient[0], ambient[1], ambient[2]};
   static GLfloat diffuseOn[] = {diffuse[0], diffuse[1], diffuse[2]};
@@ -69,7 +69,7 @@ void Light::Update(const double& deltaTime){
   if (animationTime < 2  || animationTime > 28){
     on = true;
   } else{
-    //on=false;
+    on=false;
   }
 
   animationTime += deltaTime;
@@ -88,7 +88,7 @@ void Light::Update(const double& deltaTime){
       _specular[2] += deltaTime * _specularOn[2];
       }
     }else{
-      if (_diffuse[0] > 0){
+      if (_diffuse[0] > _diffuseOn[0]/2){
       _diffuse[0] -= deltaTime * _diffuseOn[0];
       _diffuse[1] -= deltaTime * _diffuseOn[1];
       _diffuse[2] -= deltaTime * _diffuseOn[2];

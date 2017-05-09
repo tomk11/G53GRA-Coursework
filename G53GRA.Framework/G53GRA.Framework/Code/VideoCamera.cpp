@@ -6,7 +6,7 @@ VideoCamera::VideoCamera(){}
 void VideoCamera::Display(){
   glPushMatrix();
   // move to the correct position, rotate, and scale to size
-  glTranslatef(pos[0], pos[1], pos[2]); 
+  glTranslatef(pos[0], pos[1] + 100 * cos(tripodAngle * 3.1415/180), pos[2]); 
   glScalef(scale[0], scale[0], scale[0]);
   glRotatef(rotation[1], 0.0f, 1.0f, 0.0f); 
   glRotatef(rotation[2], 0.0f, 0.0f, 1.0f);

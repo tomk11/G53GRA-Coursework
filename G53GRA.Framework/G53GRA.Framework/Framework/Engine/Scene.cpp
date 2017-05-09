@@ -2,9 +2,10 @@
 #include "../Interface/Input.h"
 #include "Scene.h"
 #include "../Interface/DisplayableObject.h"
-#include "../Utility/Camera.cpp"
-#include "../Utility/Texture.cpp"
 #include <cstdlib>
+#include "../Utility/Texture.cpp"	//! Handles Texture loading for bitmap images
+#include "../Utility/Camera.cpp"  //! Camera class
+
 
 Texture Scene::texture = Texture();		// Initialise Texture handler
 Camera Scene::camera = Camera();        // Initialise Camera object

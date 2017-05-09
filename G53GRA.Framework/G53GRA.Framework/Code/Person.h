@@ -5,6 +5,9 @@
 #include "../Framework/Interface/DisplayableObject.h"
 #include "../Framework/Interface/Animation.h"
 #include "../Framework/Interface/Input.h"
+#include "TexturedCuboid.h"
+#include "Cylinder.h"
+
 using namespace std;
 
 class Person :
@@ -43,6 +46,10 @@ public:
     void wait();
     void judoThrow();
     void getThrown();
+    void sit();
+
+    //Texturing
+    void setTextures(const std::string& frontText, const std::string& baseText,  const std::string& endText,  const std::string& skinText );
     
     // Functions that allow our objects to talk to one another
     void setOpponent(Person* p);
@@ -76,14 +83,16 @@ private:
 	Person* opponent;
 	bool hasOpponent;
 
-	// Keyframes for Throw
+	// Keyframes for Throw. Letters represent body parts, e.g. RH = Right Hip
 	const static int tFrames = 9;
-	int throwRightHipFrames[tFrames] =  {0, -30, -30, -60,   0,   0,   0,   0,   0};
-	int throwRightKneeFrames[tFrames] = {0,   0,  50,   0,   0,   0,   0,   0,   0};
-	int throwLeftHipFrames[tFrames] =   {0,  20, -30, -60,   0,   0,   0,   0,   0};
-	int throwLeftKneeFrames[tFrames] =  {0,  20,  50,   0,   0,   0,   0,   0,   0};
-	int throwBodyFrames[tFrames] =      {0,   0,   0,  50,   0,   0,   0,   0,   0};
-	int throwDirectionFrames[tFrames] = {0,  15, 180, 180, 180, 360, 360, 360, 360};
+	int throwRH[tFrames] = {0, -30, -40, -110,   -110,   0,   0,   0,   0};
+	int throwRK[tFrames] = {0,   0,  60,   0,   0,   0,   0,   0,   0};
+	int throwLH[tFrames] = {0,  20, -40, -110,   -110,   0,   0,   0,   0};
+	int throwLK[tFrames] = {0,  20,  60,   0,   0,   0,   0,   0,   0};
+	int throwB[tFrames] =  {0,   0,   0,  100,   100,   0,   0,   0,   0};
+	int throwD[tFrames] =  {0,  15, 180, 180, 180, 360, 360, 360, 360};
+	float bas = 0;
+
 
 	// Keyframes for walking
 	int WalkRightHipAngleFrames[9] = {0, -10, -25, -10, 0, 10, 15, 10,0};
@@ -108,7 +117,7 @@ private:
 
 	// These parts define the relative dimensions of the player's body parts. They stat constant.
 	float BodyDim[3] = {.3f, .55f, .2f};
-	float LowerArmDim[3] = {.1f, .25f, .1f}, UpperArmDim[3] = {.13f, .25f, .13f};
+	float LowerArmDim[3] = {.1f, .3, .1f}, UpperArmDim[3] = {.13f, .25f, .13f};
 	float LowerLegDim[3] = {.12f, .45f, .12f}, UpperLegDim[3] = {.16f, .4f, .16f};
 	float HeadDim[3] = {.15, .15, .15}, NeckDim[3] = {.08, .08, .08};
 
@@ -117,4 +126,10 @@ private:
 	float positionModifierSizeX;
 	string positionRef = "Left Foot";
 	float direction = 0, directionModifier =0;
+
+	// Texture variables
+	bool hasTexture =false;
+	string frontTexture, baseTexture, endTexture, skinTexture;
+	GLint texIDskin;
+
 };
