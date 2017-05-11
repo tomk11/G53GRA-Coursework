@@ -1,3 +1,8 @@
+# G53GRA COMPUTER GRAPHICS COURSEWORK
+![](Writeup/normal.gif)
+![](Writeup/ThirdPerson.gif)
+![](Writeup/FirstPerson.gif)
+
 # C++ Framework for Coursework and Demos
 #### G53GRA Computer Graphics
 #### Spring Semester 2016/17

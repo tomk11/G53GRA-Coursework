@@ -371,7 +371,6 @@ void Person::DrawLeftArm(){
   }
   glPopMatrix();
 
-
   glTranslatef(0, -100*UpperArmDim[1],0);
   glRotatef(-LeftShoulderAngle, 0,0,1);
 
@@ -447,7 +446,6 @@ void Person::DrawHead(){
   glScalef(HeadDim[0],HeadDim[1],HeadDim[2]);
   glTranslatef(0, 100, 0);
   glutSolidSphere(100.0f, 10,10);
-
 }
 
 double Person::sind(double angle){
