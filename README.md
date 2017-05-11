@@ -1,5 +1,5 @@
 # G53GRA COMPUTER GRAPHICS COURSEWORK
-![](Writeup/normal.gif)
+![](Writeup/Normal.gif)
 ![](Writeup/ThirdPerson.gif)
 ![](Writeup/FirstPerson.gif)
 
